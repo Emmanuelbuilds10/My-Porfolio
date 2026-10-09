@@ -24,14 +24,23 @@
 .DS_Store
 *.pem
 
+# local demo-admin state (which projects show on the landing page)
+.demo-featured.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+dev-server.log
+
+# accidental Windows artifact (literal "nul" file)
+nul
+
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel

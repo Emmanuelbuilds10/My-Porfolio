@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-label="Illustrated portrait">
+  <defs>
+    <clipPath id="medallion">
+      <circle cx="210" cy="210" r="210" />
+    </clipPath>
+    <linearGradient id="jacket" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2e8f4" />
+      <stop offset="1" stop-color="#9fb0cc" />
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7b4a2d" />
+      <stop offset="1" stop-color="#5d3520" />
+    </linearGradient>
+    <linearGradient id="collar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#cdd8ea" />
+    </linearGradient>
+  </defs>
+
+  <g clip-path="url(#medallion)">
+    <!-- Backdrop -->
+    <rect width="420" height="420" fill="#3b2a63" />
+    <circle cx="150" cy="130" r="190" fill="#4a3579" />
+
+    <!-- Shoulders / jacket -->
+    <path d="M32 420c0-92 62-152 178-152s178 60 178 152z" fill="url(#jacket)" />
+    <path d="M178 268h64v58l-32 34-32-34z" fill="#8ea0bf" />
+
+    <!-- Collar + zip -->
+    <path d="M178 268l32 34 32-34 18 12-50 52-50-52z" fill="url(#collar)" />
+    <rect x="206" y="316" width="8" height="104" rx="4" fill="#6f809f" />
+    <circle cx="210" cy="360" r="12" fill="#f2f4f9" stroke="#6f809f" stroke-width="3" />
+    <text x="210" y="364" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#6f809f">OVT</text>
+
+    <!-- Neck -->
+    <path d="M182 232h56v46h-56z" fill="#4d2b19" />
+
+    <!-- Head -->
+    <ellipse cx="210" cy="176" rx="70" ry="82" fill="url(#skin)" />
+    <!-- Ears -->
+    <ellipse cx="141" cy="182" rx="11" ry="16" fill="#6b3f26" />
+    <ellipse cx="279" cy="182" rx="11" ry="16" fill="#6b3f26" />
+    <!-- Hair -->
+    <path d="M140 156c0-46 32-76 70-76s70 30 70 76c0-18-16-30-38-34-24-4-46 2-66 12-18 9-30 14-36 22z" fill="#241811" />
+    <!-- Brows + eyes -->
+    <rect x="176" y="162" width="26" height="6" rx="3" fill="#241811" />
+    <rect x="218" y="162" width="26" height="6" rx="3" fill="#241811" />
+    <ellipse cx="189" cy="184" rx="9" ry="8" fill="#fdfdff" />
+    <ellipse cx="231" cy="184" rx="9" ry="8" fill="#fdfdff" />
+    <circle cx="189" cy="184" r="4.5" fill="#241811" />
+    <circle cx="231" cy="184" r="4.5" fill="#241811" />
+    <!-- Nose + smile -->
+    <path d="M210 196v18h-8" fill="none" stroke="#4d2b19" stroke-width="5" stroke-linecap="round" />
+    <path d="M190 228c10 9 30 9 40 0" fill="none" stroke="#3a1f12" stroke-width="6" stroke-linecap="round" />
+  </g>
+</svg>

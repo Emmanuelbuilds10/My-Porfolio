@@ -1,26 +1,403 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ============================================================================
+   DESIGN TOKENS — the single source of truth for the whole site.
+   Tailwind v4 turns each token into utilities automatically:
+     --color-panel     -> bg-panel / text-panel / border-panel
+     --color-accent    -> bg-accent / text-accent / border-accent
+     --font-serif      -> font-serif
+     --radius-card     -> rounded-card
+     --spacing-gutter  -> gap-gutter / p-gutter / mt-gutter
+     --shadow-card     -> shadow-card
+   Never hardcode a hex value, radius or font stack inside a component.
+   ========================================================================== */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ---- surfaces ---------------------------------------------------------- */
+  --color-canvas: #0a0a0f; /* page background (near-black navy) */
+  --color-veil: #16161d; /* in-between surface, scrims over media */
+  --color-well: #131318; /* recessed: inputs, code blocks, image placeholders */
+  --color-panel: #2a2a35; /* raised cards & panels */
+
+  /* ---- text -------------------------------------------------------------- */
+  --color-fg: #f6f6f8; /* headings, high-emphasis copy */
+  --color-body: #c9c9d6; /* long-form reading copy */
+  --color-muted: #a3a3b8; /* excerpts, secondary copy */
+  --color-faint: #7b7b92; /* meta lines, timestamps */
+
+  /* ---- accent ------------------------------------------------------------ */
+  --color-accent: #8b5cf6; /* violet */
+  --color-accent-strong: #7c3aed; /* hover / pressed violet */
+  --color-accent-soft: #8b5cf626; /* 15% violet wash for tints + hovers */
+  --color-accent-veil: #8b5cf64d; /* 30% violet wash for the hero duotone */
+  --color-accent-glow: #8b5cf673; /* violet used in focus rings + shadows */
+  --color-on-accent: #ffffff;
+
+  /* ---- status ----------------------------------------------------------- */
+  --color-success: #4ade80;
+  --color-success-soft: #4ade8026;
+  --color-danger: #f87171;
+  --color-danger-soft: #f8717126;
+  --color-warn: #fbbf24;
+  --color-info: #38bdf8; /* project type badge — the second accent */
+  --color-info-soft: #38bdf826;
+
+  /* ---- lines ------------------------------------------------------------- */
+  --color-line: #26262f; /* hairlines, dividers */
+  --color-line-strong: #3a3a47; /* input + outline borders */
+
+  /* ---- type ------------------------------------------------------------- */
+  --font-sans: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* ---- radii ------------------------------------------------------------ */
+  --radius-media: 1rem; /* images inside cards */
+  --radius-card: 1.25rem; /* 20px — cards & panels */
+  --radius-button: 0.75rem; /* 12px — buttons & fields */
+  --radius-pill: 9999px; /* tag pills, filter chips, avatars */
+
+  /* ---- spacing rhythm --------------------------------------------------- */
+  --spacing-gutter: 1.5rem; /* page side padding */
+  --spacing-block: 1.75rem; /* gap between grid cards */
+  --spacing-section: 6.5rem; /* gap between major page sections */
+  --spacing-stack: 2.75rem; /* gap inside a section */
+
+  /* ---- elevation -------------------------------------------------------- */
+  --shadow-card: 0 24px 60px -36px rgb(0 0 0 / 0.95);
+  --shadow-raised: 0 18px 38px -24px rgb(0 0 0 / 0.85);
+  --shadow-accent: 0 16px 36px -20px var(--color-accent-glow);
+
+  /* ---- motion ----------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Only suppress the ring when the browser can't be trusted to draw one. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* --------------------------------------------------------------------------
+     The oversized outline wordmark under the hero and the footer lockup.
+     Drawn with a text stroke so the letters stay hollow; browsers without
+     `-webkit-text-stroke` fall back to a solid fill rather than vanishing.
+     -------------------------------------------------------------------------- */
+  .wordmark-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-fg);
+  }
+
+  @media (min-width: 768px) {
+    .wordmark-outline {
+      -webkit-text-stroke-width: 3px;
+    }
+  }
+
+  @supports not (-webkit-text-stroke: 1px black) {
+    .wordmark-outline {
+      color: var(--color-fg);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Long-form markdown body. Applied by the post/project detail page so the
+     rendered markdown inherits the design system instead of browser defaults.
+     -------------------------------------------------------------------------- */
+  .prose-post {
+    color: var(--color-body);
+    font-size: 1rem;
+    line-height: 1.75;
+
+    & > * + * {
+      margin-top: 1.25rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      line-height: 1.3;
+      color: var(--color-fg);
+      margin-top: 2.75rem;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--color-fg);
+      margin-top: 2.25rem;
+    }
+
+    h2 + *,
+    h3 + * {
+      margin-top: 0.875rem;
+    }
+
+    strong {
+      color: var(--color-fg);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-glow);
+      text-underline-offset: 3px;
+      transition: color 150ms ease; /* hover color comes from --color-accent-strong */
+    }
+
+    a:hover {
+      color: var(--color-accent-strong);
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+
+    li::marker {
+      color: var(--color-accent);
+    }
+
+    li + li {
+      margin-top: 0.875rem;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--color-accent);
+      padding-left: 1.25rem;
+      color: var(--color-muted);
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      line-height: 1.5;
+    }
+
+    code {
+      background-color: var(--color-well);
+      border: 1px solid var(--color-line);
+      border-radius: 0.375rem;
+      padding: 0.125rem 0.375rem;
+      font-size: 0.875em;
+    }
+
+    pre {
+      background-color: var(--color-well);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-card);
+      padding: 1.25rem;
+      overflow-x: auto;
+    }
+
+    pre code {
+      background: none;
+      border: 0;
+      padding: 0;
+      font-size: 0.875rem;
+    }
+
+    img {
+      border-radius: var(--radius-card);
+    }
+
+    hr {
+      border-color: var(--color-line);
+    }
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Landing: the decorative cover strip under "Selected Work". The track holds
+   the covers twice, so a -50% shift loops seamlessly. Hovering pauses it, and
+   `prefers-reduced-motion` stops it entirely.
+   ---------------------------------------------------------------------------- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Motion: shared entrance + ambient animations.
+
+   Kept as plain CSS rather than a motion library — the whole set is opacity /
+   transform only, so it stays on the compositor and the surrounding Server
+   Components never need a client boundary. The global `prefers-reduced-motion`
+   rule above collapses every duration to ~0ms, so these become instant.
+   ---------------------------------------------------------------------------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 700ms var(--ease-out-soft) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 900ms var(--ease-out-soft) both;
+}
+
+.animate-float {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+/* Nav link underline that wipes in on hover and for the active page. */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -0.4rem;
+  left: 0;
+  height: 1.5px;
+  border-radius: var(--radius-pill);
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms var(--ease-out-soft);
+}
+
+.nav-link:hover::after,
+.nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* ----------------------------------------------------------------------------
+   Admin: conditional editor fields fade in when the content type switches.
+   ---------------------------------------------------------------------------- */
+@keyframes field-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-field-in {
+  animation: field-in 240ms var(--ease-out-soft) both;
 }
