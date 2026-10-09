@@ -1,5 +1,6 @@
 import { createScriptClient } from "../src/lib/supabase/script";
 import { ADMIN_EMAIL, ADMIN_PASSWORD, seedCategories, seedFacts, seedSettings } from "./seed/data";
+import { seedLandingImages } from "./seed/landing";
 import { seedPosts } from "./seed/posts";
 import { seedProjects } from "./seed/projects";
 
@@ -95,6 +96,20 @@ async function main() {
     .upsert({ id: 1, ...seedSettings }, { onConflict: "id" });
   if (settingsError) throw new Error(`site_settings: ${settingsError.message}`);
   console.log("site_settings upserted");
+
+  // ------------------------------------------------------- landing carousel
+  // Default tiles reuse the project covers; the admin edits them afterwards.
+  const { error: marqueeError } = await supabase
+    .from("landing_images")
+    .upsert(
+      seedLandingImages.map((image) => ({
+        image_url: `/images/covers/${image.slug}.jpg`,
+        alt: image.alt,
+        sort_order: image.sort_order,
+      })),
+    );
+  if (marqueeError) throw new Error(`landing_images: ${marqueeError.message}`);
+  console.log(`landing_images upserted: ${seedLandingImages.length}`);
 
   console.log("\nSeed complete. Admin login: change the password before going live.");
 }

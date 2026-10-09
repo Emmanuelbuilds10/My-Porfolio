@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { isSupabaseConfigured, type PagedResult } from "@/lib/queries";
 import { isServiceConfigured, createServiceClient } from "@/lib/supabase/admin";
 import { createAuthClient } from "@/lib/supabase/server";
+import type { LandingImageRow, MessageRow } from "@/types/database";
 import {
   categories as fixtureCategories,
   facts as fixtureFacts,
@@ -496,4 +497,212 @@ const DEMO_SUBSCRIBERS: AdminSubscriber[] = [
   { id: "sub-2", email: "marco.silva@example.com", createdAt: "2026-09-21T09:00:00.000Z" },
   { id: "sub-3", email: "john.doe@example.com", createdAt: "2026-09-14T09:00:00.000Z" },
   { id: "sub-4", email: "northwind.team@example.com", createdAt: "2026-09-02T09:00:00.000Z" },
+];
+
+// ---------------------------------------------------------------------------
+// Messages (contact-form inbox)
+// ---------------------------------------------------------------------------
+
+export interface AdminMessage {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export type MessageTab = "all" | "unread" | "read";
+
+/** Messages have no SELECT policy for anon, but the admin client passes RLS. */
+export async function listMessages({
+  tab = "all",
+  q,
+  page = 1,
+  pageSize = 20,
+}: { tab?: MessageTab; q?: string; page?: number; pageSize?: number } = {}): Promise<
+  PagedResult<AdminMessage>
+> {
+  const empty = { items: [], total: 0, totalPages: 1, page };
+  if (!isSupabaseConfigured()) {
+    let items = [...DEMO_MESSAGES];
+    if (tab === "unread") items = items.filter((message) => !message.isRead);
+    if (tab === "read") items = items.filter((message) => message.isRead);
+    if (q) {
+      const needle = q.trim().toLowerCase();
+      items = items.filter(
+        (message) =>
+          message.email.toLowerCase().includes(needle) ||
+          `${message.firstName} ${message.lastName}`.toLowerCase().includes(needle) ||
+          message.message.toLowerCase().includes(needle),
+      );
+    }
+    return paginate(
+      items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      page,
+      pageSize,
+    );
+  }
+
+  let query = (await client())
+    .from("messages")
+    .select("*", { count: "exact" });
+
+  if (tab === "unread") query = query.eq("is_read", false);
+  if (tab === "read") query = query.eq("is_read", true);
+  if (q) {
+    const needle = `%${q.trim()}%`;
+    query = query.or(`email.ilike.${needle},message.ilike.${needle}`);
+  }
+
+  query = query
+    .order("created_at", { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1);
+
+  const { data, count, error } = await query.returns<MessageRow[]>();
+  if (error) {
+    console.error("listMessages:", error.message);
+    return empty;
+  }
+
+  const total = count ?? 0;
+  return {
+    items: (data ?? []).map(mapMessageRow),
+    total,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+    page,
+  };
+}
+
+function mapMessageRow(row: MessageRow): AdminMessage {
+  return {
+    id: row.id,
+    firstName: row.first_name,
+    lastName: row.last_name,
+    email: row.email,
+    phone: row.phone,
+    message: row.message,
+    isRead: row.is_read,
+    createdAt: row.created_at,
+  };
+}
+
+export async function unreadMessageCount(): Promise<number> {
+  if (!isSupabaseConfigured()) return DEMO_MESSAGES.filter((m) => !m.isRead).length;
+
+  const { count, error } = await (await client())
+    .from("messages")
+    .select("*", { count: "exact", head: true })
+    .eq("is_read", false);
+  if (error) return 0;
+  return count ?? 0;
+}
+
+/** Sample inbox so the Messages screen has content to review in demo mode. */
+const DEMO_MESSAGES: AdminMessage[] = [
+  {
+    id: "msg-1",
+    firstName: "Chidi",
+    lastName: "Nwosu",
+    email: "chidi.nwosu@example.com",
+    phone: "+234 803 555 0100",
+    message:
+      "We need a full brand refresh — logo, landing page and a pitch deck — before our June launch. What does your timeline look like?",
+    isRead: false,
+    createdAt: "2026-10-07T10:24:00.000Z",
+  },
+  {
+    id: "msg-2",
+    firstName: "Grace",
+    lastName: "Adeyemi",
+    email: "grace@example.com",
+    phone: null,
+    message:
+      "Loved the Pigment case study. Are you available for a short design-systems audit next month?",
+    isRead: false,
+    createdAt: "2026-10-05T16:02:00.000Z",
+  },
+  {
+    id: "msg-3",
+    firstName: "Tomas",
+    lastName: "Lima",
+    email: "tomas.lima@example.com",
+    phone: "+351 912 555 014",
+    message: "Quick one — do you also handle Webflow builds, or design only?",
+    isRead: true,
+    createdAt: "2026-09-30T09:41:00.000Z",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Landing images (Selected Work cover carousel)
+// ---------------------------------------------------------------------------
+
+export interface AdminLandingImage {
+  id: string;
+  imageUrl: string;
+  alt: string;
+  order: number;
+}
+
+/** Public read is open; the admin just orders it. */
+export async function listLandingImages(): Promise<AdminLandingImage[]> {
+  if (!isSupabaseConfigured()) return DEMO_LANDING_IMAGES;
+
+  const { data, error } = await (await client())
+    .from("landing_images")
+    .select("id, image_url, alt, sort_order")
+    .order("sort_order")
+    .returns<LandingImageRow[]>();
+
+  if (error) {
+    console.error("listLandingImages:", error.message);
+    return [];
+  }
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    imageUrl: row.image_url,
+    alt: row.alt,
+    order: row.sort_order,
+  }));
+}
+
+export async function getLandingImageCount(): Promise<number> {
+  if (!isSupabaseConfigured()) return DEMO_LANDING_IMAGES.length;
+
+  const { count, error } = await (await client())
+    .from("landing_images")
+    .select("*", { count: "exact", head: true });
+  if (error) return 0;
+  return count ?? 0;
+}
+
+/** Sample marquee so the screen has content to review in demo mode. */
+const DEMO_LANDING_IMAGES: AdminLandingImage[] = [
+  {
+    id: "img-1",
+    imageUrl: "/images/covers/emmanuel-portfolio.jpg",
+    alt: "Portfolio site cover",
+    order: 1,
+  },
+  {
+    id: "img-2",
+    imageUrl: "/images/covers/pigment.jpg",
+    alt: "Pigment design-token pipeline",
+    order: 2,
+  },
+  {
+    id: "img-3",
+    imageUrl: "/images/covers/digest.jpg",
+    alt: "Digest newsletter service",
+    order: 3,
+  },
+  {
+    id: "img-4",
+    imageUrl: "/images/covers/static-notes.jpg",
+    alt: "Static Notes generator",
+    order: 4,
+  },
 ];

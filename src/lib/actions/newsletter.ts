@@ -1,5 +1,7 @@
 "use server";
 
+import { createPublicClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/queries";
 import { isValidEmail, normalizeEmail } from "@/lib/validation";
 import type { ActionResult } from "@/lib/types";
 
@@ -35,10 +37,27 @@ export async function subscribe(
     return { ok: false, message: "That doesn't look like a valid email address." };
   }
 
-  // TODO(Phase 5): insert into `subscribers` (conflict on email = already
-  // subscribed) and send the welcome email, then return SUCCESS.
-  return {
-    ok: false,
-    message: "The newsletter isn't connected to the database yet — that lands in Phase 5.",
-  };
+  if (!isSupabaseConfigured()) {
+    return {
+      ok: false,
+      message: "The newsletter isn't connected to the database yet.",
+    };
+  }
+
+  // A repeat email hits the unique index; that counts as success — the copy
+  // is identical for new and existing subscribers so nobody can probe who is
+  // on the list. Welcome-email sending stays a follow-up (needs a mail key).
+  const { error } = await createPublicClient()
+    .from("subscribers")
+    .insert({ email });
+
+  if (error && error.code !== "23505") {
+    console.error("subscribe:", error.message);
+    return {
+      ok: false,
+      message: "Could not subscribe right now — please try again in a moment.",
+    };
+  }
+
+  return SUCCESS;
 }

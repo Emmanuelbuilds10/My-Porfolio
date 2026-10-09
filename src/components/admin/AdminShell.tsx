@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import {
   FolderTree,
+  Images,
+  Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -23,6 +25,8 @@ const NAV = [
   { href: "/admin/new", label: "New", icon: Plus, exact: false },
   { href: "/admin/categories", label: "Categories", icon: FolderTree, exact: false },
   { href: "/admin/facts", label: "Facts", icon: Sparkles, exact: false },
+  { href: "/admin/marquee", label: "Landing carousel", icon: Images, exact: false },
+  { href: "/admin/messages", label: "Messages", icon: Inbox, exact: false },
   { href: "/admin/subscribers", label: "Subscribers", icon: Users, exact: false },
   { href: "/admin/settings", label: "Settings", icon: SettingsIcon, exact: false },
 ];

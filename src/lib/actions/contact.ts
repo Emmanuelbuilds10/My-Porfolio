@@ -1,5 +1,7 @@
 "use server";
 
+import { createPublicClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/queries";
 import { isValidEmail, normalizeEmail } from "@/lib/validation";
 import { site } from "@/lib/site";
 import type { ActionResult } from "@/lib/types";
@@ -7,10 +9,10 @@ import type { ActionResult } from "@/lib/types";
 /**
  * Landing contact form.
  *
- * Validates and screens the submission (honeypot) so the whole UX can be built
- * and reviewed, then hands off. Persistence is not wired yet — there is no
- * `messages` table — so a valid message returns a clear pointer to email rather
- * than silently pretending it was delivered.
+ * Validates and screens the submission (honeypot), then inserts it into the
+ * `messages` table — the public INSERT policy is all the anon key needs, and
+ * with no SELECT policy submissions can't be scraped back out. Without a
+ * database the form still answers, pointing at email as the fallback.
  */
 export async function sendMessage(
   _prevState: ActionResult | null,
@@ -23,6 +25,7 @@ export async function sendMessage(
 
   const firstName = String(formData.get("firstName") ?? "").trim();
   const lastName = String(formData.get("lastName") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim();
   const email = normalizeEmail(String(formData.get("email") ?? ""));
   const message = String(formData.get("message") ?? "").trim();
 
@@ -38,10 +41,28 @@ export async function sendMessage(
     return { ok: false, message: "Tell me a little about your project." };
   }
 
-  // TODO: persist to a `messages` table (or send a notification email) and
-  // return the success shape once the message has actually been stored.
-  return {
-    ok: false,
-    message: `The contact form isn't connected yet — email me at ${site.email}.`,
-  };
+  if (!isSupabaseConfigured()) {
+    return {
+      ok: false,
+      message: `The contact form isn't connected yet — email me at ${site.email}.`,
+    };
+  }
+
+  const { error } = await createPublicClient().from("messages").insert({
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    phone: phone || null,
+    message,
+  });
+
+  if (error) {
+    console.error("sendMessage:", error.message);
+    return {
+      ok: false,
+      message: `The message could not be delivered right now — email me at ${site.email}.`,
+    };
+  }
+
+  return { ok: true, message: "Message sent — I'll get back to you soon." };
 }

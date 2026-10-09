@@ -84,6 +84,26 @@ export interface Subscriber {
   createdAt: string;
 }
 
+/** One contact-form submission, read through the admin inbox. */
+export interface ContactMessage {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+/** One tile of the landing page's "Selected Work" cover carousel. */
+export interface LandingImage {
+  id: string;
+  imageUrl: string;
+  alt: string;
+  order: number;
+}
+
 /** Result shape returned by every Server Action, rendered inline or as a toast. */
 export type ActionResult =
   | { ok: true; message: string }

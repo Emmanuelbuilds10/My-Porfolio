@@ -64,3 +64,22 @@ export interface SubscriberRow {
   email: string;
   created_at: string;
 }
+
+export interface MessageRow {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface LandingImageRow {
+  id: string;
+  image_url: string;
+  alt: string;
+  sort_order: number;
+  created_at: string;
+}
