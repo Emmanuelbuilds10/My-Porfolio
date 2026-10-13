@@ -55,11 +55,8 @@
   --radius-button: 0.75rem; /* 12px — buttons & fields */
   --radius-pill: 9999px; /* tag pills, filter chips, avatars */
 
-  /* ---- spacing rhythm --------------------------------------------------- */
-  --spacing-gutter: 1.5rem; /* page side padding */
-  --spacing-block: 1.75rem; /* gap between grid cards */
-  --spacing-section: 6.5rem; /* gap between major page sections */
-  --spacing-stack: 2.75rem; /* gap inside a section */
+  /* ---- spacing rhythm ---------------------------------------------------
+     Defined in the plain `@theme` block below, not here: see the note there. */
 
   /* ---- elevation -------------------------------------------------------- */
   --shadow-card: 0 24px 60px -36px rgb(0 0 0 / 0.95);
@@ -68,6 +65,31 @@
 
   /* ---- motion ----------------------------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   Spacing rhythm.
+
+   Deliberately a separate, non-`inline` `@theme` block. With `@theme inline`
+   Tailwind bakes the literal value into each utility (`.mt-section { margin-top:
+   6.5rem }`), which freezes the section rhythm at one size. Declared this way
+   the utilities read `var(--spacing-*)` instead, so the single override at the
+   bottom of this file retunes every `mt-section`, `mt-stack` and `gap-card` on
+   the site for small screens at once.
+   -------------------------------------------------------------------------- */
+@theme {
+  --spacing-gutter: 1.5rem; /* page side padding */
+  --spacing-section: 6.5rem; /* gap between major page sections */
+  --spacing-stack: 2.75rem; /* gap inside a section */
+  /*
+   * Not named `block`, on purpose. Tailwind's `--spacing-*` namespace also feeds
+   * the logical-size utilities, so a size named `block` emits
+   * `.inline-block { inline-size: <value> }` — a second rule for the same class
+   * as the `display: inline-block` utility. Both applied, so every inline-block
+   * element (the skill chips) was silently squashed to the token's width with
+   * its text overflowing. `grid` and `flex` collide the same way, hence `card`.
+   */
+  --spacing-card: 1.75rem; /* gap between grid cards */
 }
 
 @layer base {
@@ -149,6 +171,40 @@
     .wordmark-outline {
       color: var(--color-fg);
     }
+  }
+
+  /* --------------------------------------------------------------------------
+     Soft portrait edges.
+
+     A mask, not a blur: the picture stays sharp while its outermost ring fades
+     into the page, so a portrait dissolves into the background instead of
+     sitting on a hard rim. `closest-side` keeps the fade circular at any size
+     (the element is square and `rounded-pill`), and it composes with the glow
+     already sitting behind the image.
+     -------------------------------------------------------------------------- */
+  .portrait-soft-edge {
+    -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+  }
+
+  /* --------------------------------------------------------------------------
+     Hero portrait: the circular fade above, plus a bottom fade.
+
+     Cut-out portraits are sliced off flat at the bottom of the frame, which
+     reads as a hard horizontal line once the wordmark sits right under it. The
+     two masks are intersected, so a pixel survives only where both are opaque:
+     the rim stays round and the bottom dissolves into the page instead of
+     ending.
+     -------------------------------------------------------------------------- */
+  .hero-portrait-fade {
+    -webkit-mask-image:
+      radial-gradient(closest-side, #000 72%, transparent 100%),
+      linear-gradient(to bottom, #000 66%, transparent 100%);
+    mask-image:
+      radial-gradient(closest-side, #000 72%, transparent 100%),
+      linear-gradient(to bottom, #000 66%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   /* --------------------------------------------------------------------------
@@ -400,4 +456,19 @@
 
 .animate-field-in {
   animation: field-in 240ms var(--ease-out-soft) both;
+}
+
+/* ----------------------------------------------------------------------------
+   Small screens: tighten the section rhythm.
+
+   Unlayered on purpose — a plain rule outranks anything inside `@layer theme`,
+   so this beats the `@theme` defaults without any specificity games. Only the
+   three layout tokens move; `--spacing-gutter` is the page gutter and stays put.
+   ---------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    --spacing-section: 3.75rem; /* 104px -> 60px between major sections */
+    --spacing-stack: 1.75rem; /* 44px -> 28px inside a section */
+    --spacing-card: 1.25rem; /* 28px -> 20px between grid cards */
+  }
 }

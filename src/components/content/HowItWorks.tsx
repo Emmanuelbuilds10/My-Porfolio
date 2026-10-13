@@ -32,7 +32,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <ol className="relative mt-stack grid gap-12 md:grid-cols-3 md:gap-8">
+        <ol className="relative mt-stack grid gap-8 md:grid-cols-3">
           {/* Dashed connector threaded behind the icon boxes on wide screens. */}
           <div
             aria-hidden

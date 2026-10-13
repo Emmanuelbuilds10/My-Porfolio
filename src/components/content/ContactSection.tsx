@@ -33,7 +33,7 @@ export function ContactSection() {
           😎
         </span>
 
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* ---- Pitch + quick details ---- */}
           <div className="max-w-[520px]">
             <Eyebrow>{site.contactEyebrow}</Eyebrow>
@@ -99,7 +99,7 @@ export function ContactSection() {
                   type="email"
                   inputMode="email"
                   autoComplete="email"
-                  placeholder="john.doe@gmail.com"
+                  placeholder="emmanueluwadiegwu10@gmail.com"
                   aria-invalid={state?.ok === false || undefined}
                   className={FIELD}
                 />

@@ -46,7 +46,7 @@ function CoverMarquee({
   const track = [...tiles, ...tiles];
 
   return (
-    <div aria-hidden className="mt-16 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+    <div aria-hidden className="mt-10 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] md:mt-16">
       <div className="animate-marquee flex w-max gap-4">
         {track.map((tile, index) => (
           <div key={`${tile.key}-${index}`} className="w-40 shrink-0 md:w-48">
@@ -91,7 +91,7 @@ export async function SelectedWork() {
 
         {items.length > 0 ? (
           <>
-            <div className="mt-stack grid gap-block sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-stack grid gap-card sm:grid-cols-2 lg:grid-cols-3">
               {items.map((project, index) => (
                 <Reveal key={project.id} delay={(index % 3) * 70} className="h-full">
                   <WorkCard project={project} priority={index < 3} />

@@ -25,7 +25,7 @@ export function CardSkeleton() {
 
 export function CardGridSkeleton({ count = 9 }: { count?: number }) {
   return (
-    <div className="grid gap-block sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-card sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }, (_, index) => (
         <CardSkeleton key={index} />
       ))}

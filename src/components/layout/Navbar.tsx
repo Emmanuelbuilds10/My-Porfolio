@@ -18,6 +18,14 @@ function isActive(pathname: string, href: string) {
  * a hairline border and shadow once the page scrolls behind it.
  *
  * The labels come from `navLinks` — a short list: Home, Work, About, Blog.
+ *
+ * The mobile scrim and drawer are siblings of the `<header>`, not children.
+ * `backdrop-filter` on the header makes it the containing block for any
+ * `position: fixed` descendant, which both collapsed the scrim (its `top-16`
+ * resolved against the 64px header) and let the closed drawer — parked at
+ * `translate-x-full` — extend the document 280px to the right. Outside the
+ * header they anchor to the viewport again, so the closed drawer no longer
+ * causes horizontal page scroll.
  */
 export function Navbar() {
   const pathname = usePathname();
@@ -50,60 +58,62 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full",
-        "transition-[background-color,border-color,box-shadow] duration-300 ease-out-soft",
-        scrolled
-          ? "border-b border-line bg-canvas/85 shadow-raised backdrop-blur-md"
-          : "border-b border-transparent bg-canvas/60 backdrop-blur-sm",
-      )}
-    >
-      <Container className="flex h-16 items-center justify-between gap-6 md:h-[72px]">
-        <Link
-          href="/"
-          className="font-serif text-xl text-fg transition-colors duration-200 hover:text-accent"
-        >
-          {site.name}
-        </Link>
+    <>
+      <header
+        className={cn(
+          "sticky top-0 z-50 w-full",
+          "transition-[background-color,border-color,box-shadow] duration-300 ease-out-soft",
+          scrolled
+            ? "border-b border-line bg-canvas/85 shadow-raised backdrop-blur-md"
+            : "border-b border-transparent bg-canvas/60 backdrop-blur-sm",
+        )}
+      >
+        <Container className="flex h-16 items-center justify-between gap-6 md:h-[72px]">
+          <Link
+            href="/"
+            className="font-serif text-xl text-fg transition-colors duration-200 hover:text-accent"
+          >
+            {site.name}
+          </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-9 md:flex">
-          {navLinks.map((link) => {
-            const active = isActive(pathname, link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "nav-link text-sm transition-colors duration-200",
-                  active ? "text-accent" : "text-muted hover:text-fg",
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+          <nav aria-label="Main" className="hidden items-center gap-9 md:flex">
+            {navLinks.map((link) => {
+              const active = isActive(pathname, link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "nav-link text-sm transition-colors duration-200",
+                    active ? "text-accent" : "text-muted hover:text-fg",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent md:hidden"
-        >
-          {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
-          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-        </button>
-      </Container>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent md:hidden"
+          >
+            {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+          </button>
+        </Container>
+      </header>
 
       {/* Scrim */}
       <div
         aria-hidden
         onClick={() => setOpen(false)}
         className={cn(
-          "fixed inset-0 top-16 z-40 bg-canvas/70 backdrop-blur-sm md:hidden",
+          "fixed inset-0 z-40 bg-canvas/70 backdrop-blur-sm md:hidden",
           "transition-opacity duration-300 ease-out-soft",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
@@ -172,6 +182,6 @@ export function Navbar() {
           </a>
         </div>
       </aside>
-    </header>
+    </>
   );
 }

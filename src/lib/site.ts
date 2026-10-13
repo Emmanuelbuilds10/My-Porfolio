@@ -16,9 +16,9 @@ export const site = {
    */
   heroGreeting: "Hello",
   heroHandle: "Skyzkreative",
-  heroTitle: "Designing bold digital experiences that stand out.",
+  heroTitle: "Building clean, fast websites that people enjoy using.",
   heroSubtitle:
-    "Skyzkreative is a UI/UX & graphic designer creating clean, modern designs for brands that want to look professional and trusted.",
+    "I'm Emmanuel, a web developer and designer who builds clean, modern websites for brands that want to look professional and be trusted.",
   /** Small badge above the hero title. */
   availabilityLabel: "Available for work",
   /** Landing section labels (the violet-dot eyebrows). */
@@ -34,7 +34,8 @@ export const site = {
   /** The headline above the testimonial carousel. */
   testimonialsSubtitle: "Here are a few kind words from people I've had the pleasure of working with.",
   /** The headline in the "Selected work" section. */
-  workSubtitle: "A collection of products I've designed with clarity, usability, and real-world impact.",
+  workSubtitle:
+    "A collection of websites and digital products I've designed and built, made to be clear, easy to use, and useful in the real world.",
   workSubtitleAside: "Real problems. Thoughtful solutions. Designed to be used, not just seen.",
   /** The button under each Selected Work card. */
   caseStudyLabel: "View full case study",
@@ -53,7 +54,7 @@ export const site = {
   /** Contact section copy. */
   contactTitle: "Let's create something great together.",
   contactBody:
-    "I'm always open to new projects, creative collaborations, or just a quick chat about design. Whether you have an idea in mind or need help bringing it to life, feel free to reach out — I'd love to hear from you.",
+    "I'm always open to new projects, collaborations, or just a quick chat about building for the web. Whether you have an idea in mind or need help bringing it to life, reach out. I'd love to hear from you.",
   phone: "+234 8142 052 254",
   location: "Remote",
 
@@ -68,7 +69,7 @@ export const site = {
   sayHelloTitle: "Say hello",
   sayHelloBody:
     "Open to interesting projects, collaborations, or just talking about building in public.",
-  email: "hello@example.com",
+  email: "emmanueluwadiegwu10@gmail.com",
   twitterUrl: "https://twitter.com/emmanuel",
   githubUrl: "https://github.com/emmanuel",
   behanceUrl: "https://www.behance.net/emmanuel",

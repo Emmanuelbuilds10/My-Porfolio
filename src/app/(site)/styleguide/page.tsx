@@ -155,7 +155,7 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section title="Post cards (3 / 2 / 1 columns)">
-        <div className="grid gap-block sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-card sm:grid-cols-2 lg:grid-cols-3">
           {samplePosts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
@@ -171,7 +171,7 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section title="Project cards (3 / 2 / 1 columns)">
-        <div className="grid gap-block sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-card sm:grid-cols-2 lg:grid-cols-3">
           {projects
             .filter((project) => project.publishStatus === "published")
             .map((project) => (

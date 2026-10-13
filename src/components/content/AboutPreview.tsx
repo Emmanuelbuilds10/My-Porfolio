@@ -13,13 +13,23 @@ import { cn } from "@/lib/utils";
 const PORTRAIT = "/images/portrait.svg";
 
 /** Where each skill chip floats around the medallion, as absolute offsets. */
+/**
+ * Where each skill chip floats around the medallion, as absolute offsets.
+ *
+ * The horizontal offsets are deliberately kept at 9% or less. `left`/`right`
+ * resolve against the 420px medallion, and from `lg` the medallion sits in a
+ * half-width grid cell — at a 1024px viewport there are only ~46px between the
+ * medallion's edge and the window, so a deeper offset (the old -14%) pushed the
+ * left chevrons off the screen. The vertical slots stay ~55px+ apart so the
+ * taller chips can never collide.
+ */
 const CHIP_POSITIONS: Record<(typeof heroSkills)[number]["position"], string> = {
-  "top-left": "top-[2%] left-[-8%]",
-  "top-right": "top-[15%] right-[-10%]",
-  "mid-left": "top-[37%] left-[-14%]",
-  "mid-right": "top-[49%] right-[-12%]",
-  "low-left": "top-[69%] left-[-12%]",
-  "low-right": "top-[84%] left-[-6%]",
+  "top-left": "top-[1%] left-[-6%]",
+  "top-right": "top-[14%] right-[-8%]",
+  "mid-left": "top-[36%] left-[-8%]",
+  "mid-right": "top-[50%] right-[-9%]",
+  "low-left": "top-[68%] left-[-7%]",
+  "low-right": "top-[85%] right-[-5%]",
 };
 
 /** Solid black chip with white type — the design floats these around the face. */
@@ -53,7 +63,7 @@ export async function AboutPreview() {
   return (
     <section id="about" className="relative mt-section scroll-mt-24">
       <Container>
-        <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* ---- Portrait medallion + floating skill chips ---- */}
           <Reveal className="relative mx-auto w-full max-w-[420px]">
             <span
@@ -85,7 +95,7 @@ export async function AboutPreview() {
                 alt={`Portrait of ${name}`}
                 fill
                 sizes="(min-width: 1024px) 420px, 380px"
-                className="rounded-pill object-cover"
+                className="portrait-soft-edge rounded-pill object-cover"
               />
             </div>
 

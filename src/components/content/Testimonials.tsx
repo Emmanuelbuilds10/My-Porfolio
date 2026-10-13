@@ -52,7 +52,7 @@ export function Testimonials() {
               </span>
             </div>
 
-            <div className="flex flex-col justify-center p-8 md:p-12">
+            <div className="flex flex-col justify-center p-6 md:p-12">
               <p aria-live="polite" className="text-base leading-8 text-body md:text-lg">
                 {current.quote}
               </p>

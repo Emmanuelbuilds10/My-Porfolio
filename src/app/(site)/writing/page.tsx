@@ -72,7 +72,7 @@ export default async function WritingPage({ searchParams }: WritingPageProps) {
         {items.length > 0 ? (
           <div
             key={`${category}-${q}-${currentPage}`}
-            className="mt-6 grid gap-block sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-6 grid gap-card sm:grid-cols-2 lg:grid-cols-3"
           >
             {items.map((post, index) => (
               <Reveal key={post.id} delay={(index % 3) * 70} className="h-full">

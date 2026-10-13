@@ -42,8 +42,8 @@ export async function Footer() {
 
   return (
     <footer className="mt-section border-t border-line">
-      <Container className="py-14 md:py-16">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:gap-10">
+      <Container className="py-10 md:py-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:gap-10">
           {/* ---- Wordmark ---- */}
           <div className="relative min-w-0">
             {/* `overflow-hidden` + a column-sized clamp keep the wordmark
@@ -120,7 +120,7 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-2 border-t border-line pt-6 text-sm text-faint md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-2 border-t border-line pt-6 text-sm text-faint md:mt-14 md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {name}
           </p>

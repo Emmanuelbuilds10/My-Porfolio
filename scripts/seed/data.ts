@@ -59,7 +59,7 @@ export const seedSettings: SeedSettings = {
   name: "Emmanuel",
   role: "Web developer and designer",
   location: "Lisbon, Portugal",
-  email: "hello@example.com",
+  email: "emmanueluwadiegwu10@gmail.com",
   bio: [
     "I'm a web developer and designer who likes the unglamorous parts of the craft: the type scale nobody notices, the loading state that arrives at the right moment, the query that stopped doing three round trips.",
     "Most of my work is with Next.js, TypeScript and Postgres. I care about interfaces that hold up on a slow phone, and about writing code the next person can change without fear.",

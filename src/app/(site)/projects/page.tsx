@@ -107,7 +107,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         {items.length > 0 ? (
           <div
             key={`${tech}-${status}-${q}-${currentPage}`}
-            className="mt-6 grid gap-block sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-6 grid gap-card sm:grid-cols-2 lg:grid-cols-3"
           >
             {items.map((project, index) => (
               <Reveal key={project.id} delay={(index % 3) * 70} className="h-full">

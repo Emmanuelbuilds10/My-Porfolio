@@ -614,7 +614,7 @@ export const siteSettings: SiteSettings = {
     "This site is where I write up what I learn while building. If something here saves you an afternoon, that's the whole point of publishing it.",
   ],
   avatarUrl: "/images/avatar.png",
-  email: "hello@example.com",
+  email: "emmanueluwadiegwu10@gmail.com",
   twitterUrl: "https://twitter.com/emmanuel",
   githubUrl: "https://github.com/emmanuel",
   behanceUrl: "https://www.behance.net/emmanuel",
