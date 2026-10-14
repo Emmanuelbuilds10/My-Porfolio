@@ -10,7 +10,12 @@ interface FeaturedPostProps {
   className?: string;
 }
 
-/** The single promoted post under the home hero: artwork left, copy right. */
+/**
+ * The single promoted post leading the archive: artwork left, copy right.
+ *
+ * The title is an `h3` because the "Featured Post" label above it is the `h2`
+ * for this band — keeping the page's heading order h1 → h2 → h3.
+ */
 export function FeaturedPost({ post, className }: FeaturedPostProps) {
   const href = `/writing/${post.slug}`;
 
@@ -39,11 +44,11 @@ export function FeaturedPost({ post, className }: FeaturedPostProps) {
           {post.category ? <TagPill>{post.category.name}</TagPill> : null}
         </div>
 
-        <h2 className="mt-4 font-serif text-[clamp(1.7rem,3.4vw,2.4rem)] leading-[1.15] text-fg transition-colors duration-200 group-hover:text-accent">
+        <h3 className="mt-4 font-serif text-[clamp(1.7rem,3.4vw,2.4rem)] leading-[1.15] text-fg transition-colors duration-200 group-hover:text-accent-text">
           <Link href={href} className="after:absolute after:inset-0 after:content-['']">
             {post.title}
           </Link>
-        </h2>
+        </h3>
 
         <p className="mt-4 text-sm leading-relaxed text-muted md:text-base">
           {post.excerpt}

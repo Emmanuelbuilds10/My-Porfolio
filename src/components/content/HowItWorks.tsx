@@ -1,4 +1,4 @@
-import { Aperture, PenTool, Search } from "lucide-react";
+import { Aperture, PenTool, Rocket, Search } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -13,6 +13,7 @@ const STEP_ICONS: Record<string, LucideIcon> = {
   search: Search,
   "pen-tool": PenTool,
   aperture: Aperture,
+  rocket: Rocket,
 };
 
 /** Landing "How It Works": a heading pair, then the three process steps. */

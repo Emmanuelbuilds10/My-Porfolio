@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProjectCard } from "@/components/content/ProjectCard";
-import { HERO_IMAGE } from "@/lib/hero-image";
+import { HERO_ART } from "@/lib/hero-image";
 import { buildQueryHref, firstParam, PAGE_SIZE, parsePage } from "@/lib/pagination";
 import { getProjects, getTechFilters } from "@/lib/queries";
 import { site } from "@/lib/site";
@@ -62,7 +62,12 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
   return (
     <>
-      <PageHero title="Projects" subtitle={site.projectsHeroSubtitle} imageUrl={HERO_IMAGE} priority />
+      <PageHero
+        title="Projects"
+        subtitle={site.projectsHeroSubtitle}
+        imageUrl={HERO_ART.projects}
+        priority
+      />
 
       <Container className="mt-section">
         <div className="flex flex-col items-center gap-6">

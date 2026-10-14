@@ -152,7 +152,7 @@ export function MarkdownEditor({
           input.click();
         }}
         title="Insert image"
-        className="grid size-8 place-items-center rounded-md text-muted transition-colors hover:bg-accent-soft hover:text-accent"
+        className="grid size-8 place-items-center rounded-md text-muted transition-colors hover:bg-accent-soft hover:text-accent-text"
       >
         <ImagePlus aria-hidden className="size-4" />
         <span className="sr-only">Insert image</span>
@@ -244,7 +244,7 @@ function ToolButton({
       type="button"
       onClick={onClick}
       title={label}
-      className="grid size-8 place-items-center rounded-md text-muted transition-colors hover:bg-accent-soft hover:text-accent"
+      className="grid size-8 place-items-center rounded-md text-muted transition-colors hover:bg-accent-soft hover:text-accent-text"
     >
       <Icon aria-hidden className="size-4" />
       <span className="sr-only">{label}</span>

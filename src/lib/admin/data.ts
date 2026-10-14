@@ -1,8 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { contentSelect } from "@/lib/content-columns";
 import { isSupabaseConfigured, type PagedResult } from "@/lib/queries";
 import { isServiceConfigured, createServiceClient } from "@/lib/supabase/admin";
 import { createAuthClient } from "@/lib/supabase/server";
-import type { LandingImageRow, MessageRow } from "@/types/database";
+import type { ContentImageRow, LandingImageRow, MessageRow } from "@/types/database";
 import {
   categories as fixtureCategories,
   facts as fixtureFacts,
@@ -11,6 +12,7 @@ import {
 } from "@/content/fixtures";
 import { applyFeaturedOverrides } from "@/lib/demo-featured";
 import type {
+  ContentImage,
   ContentItem,
   Fact,
   PublishStatus,
@@ -38,6 +40,8 @@ export interface AdminContent {
   excerpt: string;
   body: string;
   coverImageUrl: string | null;
+  /** Extra images rendered under the body on the detail page. */
+  gallery: ContentImage[];
   altText: string | null;
   categoryId: string | null;
   category: { id: string; name: string; slug: string } | null;
@@ -63,7 +67,7 @@ export interface AdminContentOptions {
 }
 
 const ADMIN_SELECT =
-  "id, type, title, slug, excerpt, body, cover_image_url, alt_text, category_id, tags, tech_stack, live_url, repo_url, project_status, featured, publish_status, published_at, read_time, created_at, updated_at, categories(id, name, slug)";
+  "id, type, title, slug, excerpt, body, cover_image_url, gallery, alt_text, category_id, tags, tech_stack, live_url, repo_url, project_status, featured, publish_status, published_at, read_time, created_at, updated_at, categories(id, name, slug)";
 
 type AdminRow = {
   id: string;
@@ -73,6 +77,7 @@ type AdminRow = {
   excerpt: string;
   body: string;
   cover_image_url: string | null;
+  gallery: ContentImageRow[] | null;
   alt_text: string | null;
   category_id: string | null;
   tags: string[] | null;
@@ -98,6 +103,7 @@ function mapAdminRow(row: AdminRow): AdminContent {
     excerpt: row.excerpt,
     body: row.body,
     coverImageUrl: row.cover_image_url,
+    gallery: row.gallery ?? [],
     altText: row.alt_text,
     categoryId: row.category_id,
     category: row.categories ?? null,
@@ -133,7 +139,7 @@ export async function listAdminContent({
 
   let query = (await client())
     .from("content")
-    .select(ADMIN_SELECT, { count: "exact" });
+    .select(await contentSelect(await client(), ADMIN_SELECT), { count: "exact" });
 
   if (tab === "post" || tab === "project") query = query.eq("type", tab);
   if (tab === "draft") query = query.eq("publish_status", "draft");
@@ -168,7 +174,7 @@ export async function getAdminContentById(id: string): Promise<AdminContent | nu
 
   const { data, error } = await (await client())
     .from("content")
-    .select(ADMIN_SELECT)
+    .select(await contentSelect(await client(), ADMIN_SELECT))
     .eq("id", id)
     .limit(1)
     .returns<AdminRow[]>();
@@ -446,6 +452,7 @@ function toAdminContent(item: ContentItem): AdminContent {
     excerpt: item.excerpt,
     body: item.body,
     coverImageUrl: item.coverImageUrl,
+    gallery: item.gallery,
     altText: null,
     categoryId: item.category?.id ?? null,
     category: item.category,

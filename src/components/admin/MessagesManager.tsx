@@ -16,8 +16,10 @@ import {
 import type { AdminMessage, MessageTab } from "@/lib/admin/data";
 import { cn } from "@/lib/utils";
 
+/* Full width on phones (the row would otherwise be wider than the screen),
+   a fixed field from `sm` up where there is room for it. */
 const inputClass =
-  "h-10 w-[260px] rounded-button border border-line-strong bg-well px-4 text-sm text-fg outline-none transition-colors focus:border-accent";
+  "h-10 w-full rounded-button border border-line-strong bg-well px-4 text-sm text-fg outline-none transition-colors focus:border-accent sm:w-[260px]";
 
 const TABS: { value: MessageTab; label: string }[] = [
   { value: "all", label: "All" },
@@ -103,7 +105,7 @@ export function MessagesManager({
               className={cn(
                 "rounded-button px-3 py-1.5 text-xs",
                 tab === entry.value
-                  ? "bg-accent-soft text-accent"
+                  ? "bg-accent-soft text-accent-text"
                   : "text-muted hover:text-fg",
               )}
             >
@@ -113,7 +115,12 @@ export function MessagesManager({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <form action="/admin/messages" method="get" role="search" className="flex gap-2">
+          <form
+            action="/admin/messages"
+            method="get"
+            role="search"
+            className="flex w-full gap-2 sm:w-auto"
+          >
             {tab !== "all" ? <input type="hidden" name="tab" value={tab} /> : null}
             <input
               type="search"
@@ -155,7 +162,7 @@ export function MessagesManager({
                 </p>
                 <a
                   href={`mailto:${row.email}`}
-                  className="text-xs text-muted transition-colors hover:text-accent"
+                  className="text-xs text-muted transition-colors hover:text-accent-text"
                 >
                   {row.email}
                 </a>
@@ -211,8 +218,8 @@ export function MessagesManager({
               className={cn(
                 "grid size-9 place-items-center rounded-button text-sm",
                 target === page
-                  ? "bg-accent text-on-accent"
-                  : "text-muted hover:bg-accent-soft hover:text-accent",
+                  ? "bg-accent-fill text-on-accent"
+                  : "text-muted hover:bg-accent-soft hover:text-accent-text",
               )}
             >
               {target}

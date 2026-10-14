@@ -35,7 +35,7 @@ export const site = {
   testimonialsSubtitle: "Here are a few kind words from people I've had the pleasure of working with.",
   /** The headline in the "Selected work" section. */
   workSubtitle:
-    "A collection of websites and digital products I've designed and built, made to be clear, easy to use, and useful in the real world.",
+    "A collection of websites and digital products I've designed and built, useful in the real world.",
   workSubtitleAside: "Real problems. Thoughtful solutions. Designed to be used, not just seen.",
   /** The button under each Selected Work card. */
   caseStudyLabel: "View full case study",
@@ -72,7 +72,7 @@ export const site = {
   email: "emmanueluwadiegwu10@gmail.com",
   twitterUrl: "https://twitter.com/emmanuel",
   githubUrl: "https://github.com/emmanuel",
-  behanceUrl: "https://www.behance.net/emmanuel",
+  dribbbleUrl: "https://dribbble.com/Skyezkreative",
   linkedinUrl: "https://www.linkedin.com/in/emmanuel",
 } as const;
 
@@ -143,21 +143,21 @@ export const heroSkills = [
 export const processSteps = [
   {
     icon: "search",
-    title: "Research",
+    title: "Discover",
     description:
-      "Understand the users, goals, and challenges through competitor analysis, user observation, brief discussions, and research to define what truly matters.",
+      "We talk through your goals, your audience, and what the site needs to do. I plan the pages and structure so we agree on the direction before anything is built.",
   },
   {
     icon: "pen-tool",
-    title: "Wireframe",
+    title: "Design & Build",
     description:
-      "I create quick sketches and digital wireframes to explore flows and page hierarchy before adding visual polish.",
+      "I design the look and feel around your brand, then build it into a fast, responsive website that works on every screen. You see progress along the way and can give feedback.",
   },
   {
-    icon: "aperture",
-    title: "Visual Design",
+    icon: "rocket",
+    title: "Launch & Support",
     description:
-      "I bring the layout to life using typography, color, and components that align with the brand identity and improve usability.",
+      "I test everything, launch the site, and stay available afterward for fixes, updates, and improvements.",
   },
 ] as const;
 
@@ -171,32 +171,22 @@ export interface Testimonial {
 }
 
 /**
- * Client quotes. The database has no testimonials table yet, so these live
- * here — the carousel reads the same shape a table would return.
+ * Client quotes. The database has no testimonials table yet, so they live here
+ * — the carousel reads the same shape a table would return.
+ *
+ * Deliberately empty. The three placeholder quotes that used to sit here
+ * ("John Doe", "Ada Okafor", "Marco Silva") were invented copy, and publishing
+ * fabricated reviews is a deceptive-practice risk in most jurisdictions —
+ * including Nigeria's FCCPA and the FTC rules that apply if you sell to the
+ * US. Add only quotes you actually received, with the person's permission and
+ * their real name and role:
+ *
+ *   { id: "testimonial-<slug>", name: "…", role: "…", quote: "…" }
+ *
+ * The section renders nothing while this list is empty, so the landing page
+ * just gets shorter until real quotes exist.
  */
-export const testimonials: Testimonial[] = [
-  {
-    id: "testimonial-john-doe",
-    name: "John Doe",
-    role: "Product lead",
-    quote:
-      "Working with Emmanuel was a great experience. He delivered designs that not only looked amazing but also improved how users interacted with our product.",
-  },
-  {
-    id: "testimonial-ada-okafor",
-    name: "Ada Okafor",
-    role: "Founder, Northwind",
-    quote:
-      "He turned a messy brief into a flow we could ship in three weeks. The wireframes answered questions our team had been arguing about for months.",
-  },
-  {
-    id: "testimonial-marco-silva",
-    name: "Marco Silva",
-    role: "Engineering manager",
-    quote:
-      "Handover was the easiest part of the project. Every component came with states, spacing and copy already decided, so we spent our time building.",
-  },
-];
+export const testimonials: Testimonial[] = [];
 
 /**
  * Contact panel's two quick details. Both come from `site` so the landing page

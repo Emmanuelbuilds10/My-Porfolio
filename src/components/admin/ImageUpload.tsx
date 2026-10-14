@@ -4,12 +4,8 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { ImagePlus, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { createClient } from "@/lib/supabase/client";
+import { uploadImage } from "@/lib/supabase/upload";
 import { cn } from "@/lib/utils";
-
-const MAX_BYTES = 5 * 1024 * 1024;
-/** The single public bucket; folders keep covers and avatars apart. */
-const BUCKET = "covers";
 
 interface ImageUploadProps {
   label: string;
@@ -32,38 +28,16 @@ export function ImageUpload({ label, value, onChange, hint, className }: ImageUp
 
   async function upload(file: File) {
     setError(null);
-
-    if (!file.type.startsWith("image/")) {
-      setError("Only image files are allowed.");
-      return;
-    }
-    if (file.size > MAX_BYTES) {
-      setError("Images must be 5MB or smaller.");
-      return;
-    }
-
     setStatus("uploading");
-    try {
-      const supabase = createClient();
-      const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-      const path = `${label.toLowerCase().replace(/\s+/g, "-")}/${crypto.randomUUID()}.${extension}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file, { cacheControl: "31536000", upsert: false, contentType: file.type });
-
-      if (uploadError) {
-        setError(uploadError.message);
-        return;
-      }
-
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      onChange(data.publicUrl);
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Upload failed.");
-    } finally {
-      setStatus("idle");
+    // One folder per field, so covers, avatars and gallery images stay apart in
+    // the bucket without either field knowing the others exist.
+    const result = await uploadImage(file, label.toLowerCase().replace(/\s+/g, "-"));
+    setStatus("idle");
+    if (!result.ok) {
+      setError(result.message);
+      return;
     }
+    onChange(result.url);
   }
 
   return (
@@ -115,9 +89,9 @@ export function ImageUpload({ label, value, onChange, hint, className }: ImageUp
             className="flex w-full flex-col items-center gap-2 px-6 py-10 text-center"
           >
             {status === "uploading" ? (
-              <Loader2 aria-hidden className="size-5 animate-spin text-accent" />
+              <Loader2 aria-hidden className="size-5 animate-spin text-accent-text" />
             ) : (
-              <ImagePlus aria-hidden className="size-5 text-accent" />
+              <ImagePlus aria-hidden className="size-5 text-accent-text" />
             )}
             <span className="text-sm text-fg">
               {status === "uploading" ? "Uploading…" : "Drag an image here, or click to browse"}

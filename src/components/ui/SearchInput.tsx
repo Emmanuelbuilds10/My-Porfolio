@@ -89,7 +89,7 @@ export function SearchInput({
         onClick={clear}
         className={cn(
           "absolute top-1/2 right-2 grid size-7 -translate-y-1/2 place-items-center rounded-pill",
-          "text-faint transition-colors duration-200 hover:bg-accent-soft hover:text-accent",
+          "text-faint transition-colors duration-200 hover:bg-accent-soft hover:text-accent-text",
         )}
       >
         <X aria-hidden className="size-3.5" />

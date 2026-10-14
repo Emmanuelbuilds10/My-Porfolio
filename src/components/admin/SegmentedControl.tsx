@@ -42,7 +42,7 @@ export function SegmentedControl({
             onClick={() => onChange(option.value)}
             className={cn(
               "rounded-[9px] px-4 py-2 text-sm font-medium transition-colors duration-200",
-              active ? "bg-accent text-on-accent" : "text-muted hover:text-fg",
+              active ? "bg-accent-fill text-on-accent" : "text-muted hover:text-fg",
             )}
           >
             {option.label}

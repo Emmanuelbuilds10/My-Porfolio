@@ -47,7 +47,7 @@ export function ProjectCard({ project, priority = false, className }: ProjectCar
         </div>
       ) : null}
 
-      <h3 className="mt-3 font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent">
+      <h3 className="mt-3 font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent-text">
         <Link href={href} className="after:absolute after:inset-0 after:content-['']">
           {project.title}
         </Link>
@@ -66,7 +66,7 @@ export function ProjectCard({ project, priority = false, className }: ProjectCar
           ))}
           {extraTech > 0 ? (
             <li>
-              <TagPill className="bg-accent-soft text-accent">+{extraTech}</TagPill>
+              <TagPill className="bg-accent-soft text-accent-text">+{extraTech}</TagPill>
             </li>
           ) : null}
         </ul>
@@ -79,7 +79,7 @@ export function ProjectCard({ project, priority = false, className }: ProjectCar
               href={project.liveUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-accent-text"
             >
               <ExternalLink aria-hidden className="size-3.5" />
               Live
@@ -90,7 +90,7 @@ export function ProjectCard({ project, priority = false, className }: ProjectCar
               href={project.repoUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-accent-text"
             >
               <GithubIcon className="size-3.5" />
               GitHub

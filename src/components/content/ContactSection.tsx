@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { CircleAlert, CircleCheck, Mail, Phone, Play } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -48,11 +49,11 @@ export function ContactSection() {
                 return (
                   <div key={detail.label} className="rounded-card border border-line bg-veil p-5">
                     <span className="flex items-center gap-2 text-xs font-medium tracking-[0.1em] text-faint uppercase">
-                      <Icon aria-hidden className="size-4 text-accent" />
+                      <Icon aria-hidden className="size-4 text-accent-text" />
                       {detail.label}
                     </span>
                     <dd className="mt-2 text-sm text-fg">
-                      <a href={detail.href} className="transition-colors hover:text-accent">
+                      <a href={detail.href} className="transition-colors hover:text-accent-text">
                         {detail.value}
                       </a>
                     </dd>
@@ -161,6 +162,20 @@ export function ContactSection() {
                   <span>{state.message}</span>
                 </>
               ) : null}
+            </p>
+
+            {/* Consent, stated where the data is given: what it is for, and a
+                link to the policy that explains the rest. */}
+            <p className="mt-3 text-center text-[11px] leading-5 text-faint">
+              I&rsquo;ll use these details only to reply to you. Name and email are required;
+              phone is optional. Read the{" "}
+              <Link
+                href="/privacy"
+                className="text-accent-text underline underline-offset-2 transition-colors hover:text-fg"
+              >
+                Privacy Policy
+              </Link>
+              .
             </p>
           </form>
         </div>

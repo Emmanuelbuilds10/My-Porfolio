@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { CircleAlert, CircleCheck, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { subscribe } from "@/lib/actions/newsletter";
@@ -74,6 +75,19 @@ export function NewsletterCard({
         <Button type="submit" loading={pending} fullWidth size="lg">
           Subscribe
         </Button>
+
+        {/* Consent: says what the address is used for and links the policy,
+            at the point of collection rather than buried elsewhere. */}
+        <p className="text-xs leading-5 text-faint">
+          One email when I publish — no spam, unsubscribe any time. Read the{" "}
+          <Link
+            href="/privacy"
+            className="text-accent-text underline underline-offset-2 transition-colors hover:text-fg"
+          >
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </form>
 
       <p

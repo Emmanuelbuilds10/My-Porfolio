@@ -8,12 +8,13 @@ import { CoverImage } from "@/components/ui/CoverImage";
 import { TagPill } from "@/components/ui/TagPill";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ButtonLink } from "@/components/ui/Button";
+import { ContentGallery } from "@/components/content/ContentGallery";
 import { Markdown } from "@/components/content/Markdown";
 import { ProjectCard } from "@/components/content/ProjectCard";
 import { StatusPill } from "@/components/content/StatusPill";
 import { AuthorCard } from "@/components/content/AuthorCard";
-import { CopyLinkButton } from "@/components/content/ShareButtons";
-import { GithubIcon, TwitterIcon } from "@/components/icons";
+import { ContactOnXButton, CopyLinkButton } from "@/components/content/DetailActions";
+import { GithubIcon } from "@/components/icons";
 import {
   getProjectBySlug,
   getPublishedProjectSlugs,
@@ -80,7 +81,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="max-w-[760px] pt-16">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-accent"
+            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-accent-text"
           >
             <ArrowLeft aria-hidden className="size-4" />
             All projects
@@ -147,22 +148,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Markdown content={project.body} />
       </Container>
 
+      {project.gallery.length > 0 ? (
+        <Container className="mt-12">
+          <ContentGallery images={project.gallery} title={project.title} />
+        </Container>
+      ) : null}
+
       <Container size="prose" className="mt-section">
         <AuthorCard
           name={settings?.name ?? site.name}
           role={settings?.role ?? site.role}
           avatarUrl={settings?.avatarUrl ?? null}
         >
-          {contactHref ? (
-            <ButtonLink
-              href={contactHref}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <TwitterIcon className="size-4" />
-              Contact on X
-            </ButtonLink>
-          ) : null}
+          <ContactOnXButton href={contactHref} />
           <CopyLinkButton />
         </AuthorCard>
       </Container>

@@ -166,7 +166,7 @@ export function FactsManager({ facts }: { facts: Fact[] }) {
                 type="button"
                 onClick={() => move(index, -1)}
                 disabled={index === 0}
-                className="grid size-8 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent disabled:opacity-40"
+                className="grid size-8 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent-text disabled:opacity-40"
               >
                 <ArrowUp aria-hidden className="size-3.5" />
                 <span className="sr-only">Move up</span>
@@ -175,7 +175,7 @@ export function FactsManager({ facts }: { facts: Fact[] }) {
                 type="button"
                 onClick={() => move(index, 1)}
                 disabled={index === items.length - 1}
-                className="grid size-8 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent disabled:opacity-40"
+                className="grid size-8 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent-text disabled:opacity-40"
               >
                 <ArrowDown aria-hidden className="size-3.5" />
                 <span className="sr-only">Move down</span>

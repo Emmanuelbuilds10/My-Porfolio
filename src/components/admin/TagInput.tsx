@@ -59,7 +59,7 @@ export function TagInput({
         {values.map((value) => (
           <span
             key={value}
-            className="inline-flex items-center gap-1 rounded-pill bg-accent px-2.5 py-1 text-[11px] leading-none text-on-accent"
+            className="inline-flex items-center gap-1 rounded-pill bg-accent-fill px-2.5 py-1 text-[11px] leading-none text-on-accent"
           >
             {value}
             <button
@@ -102,7 +102,7 @@ export function TagInput({
                 add(suggestion);
                 inputRef.current?.focus();
               }}
-              className="inline-flex items-center gap-1 rounded-pill border border-line px-2 py-1 text-[11px] text-muted transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex items-center gap-1 rounded-pill border border-line px-2 py-1 text-[11px] text-muted transition-colors hover:border-accent hover:text-accent-text"
             >
               <Plus aria-hidden className="size-2.5" />
               {suggestion}

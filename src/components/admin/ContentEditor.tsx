@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { CircleCheck, CircleAlert, Eye, Loader2, Plus, Save } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { GalleryUpload } from "@/components/admin/GalleryUpload";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 import { SegmentedControl } from "@/components/admin/SegmentedControl";
@@ -14,7 +15,7 @@ import { createCategory } from "@/lib/admin/actions/categories";
 import type { AdminContent, CategoryOption } from "@/lib/admin/data";
 import type { ContentValues } from "@/lib/admin/schemas";
 import { estimateReadTime } from "@/lib/format";
-import type { ContentType, ProjectStatus, PublishStatus } from "@/lib/types";
+import type { ContentImage, ContentType, ProjectStatus, PublishStatus } from "@/lib/types";
 import { slugify } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +80,7 @@ export function ContentEditor({
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "");
   const [body, setBody] = useState(initial?.body ?? "");
   const [coverImageUrl, setCoverImageUrl] = useState(initial?.coverImageUrl ?? "");
+  const [gallery, setGallery] = useState<ContentImage[]>(initial?.gallery ?? []);
   const [altText, setAltText] = useState(initial?.altText ?? "");
   const [featured, setFeatured] = useState(initial?.featured ?? false);
 
@@ -142,6 +144,7 @@ export function ContentEditor({
         excerpt,
         body,
         coverImageUrl,
+        gallery,
         altText,
         featured,
         categoryId: type === "post" && categoryId ? categoryId : null,
@@ -177,7 +180,7 @@ export function ContentEditor({
       return true;
     },
     [
-      altText, body, categoryId, coverImageUrl, excerpt, featured, initial,
+      altText, body, categoryId, coverImageUrl, excerpt, featured, gallery, initial,
       liveUrl, projectStatus, publishedAt, repoUrl, slug, tags, techStack,
       title, toast, type,
     ],
@@ -359,6 +362,15 @@ export function ContentEditor({
               className={inputClass(fieldErrors.altText)}
             />
           </Field>
+
+          <GalleryUpload
+            values={gallery}
+            onChange={(next) => {
+              setGallery(next);
+              touch();
+            }}
+            hint="Shown as a grid under the body on the detail page. Drag to reorder."
+          />
 
           <MarkdownEditor
             label="Body"

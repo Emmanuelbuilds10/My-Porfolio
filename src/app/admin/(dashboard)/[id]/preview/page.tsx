@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { Container } from "@/components/ui/Container";
 import { TagPill } from "@/components/ui/TagPill";
+import { ContentGallery } from "@/components/content/ContentGallery";
 import { Markdown } from "@/components/content/Markdown";
 import { StatusBadge } from "@/components/admin/Badges";
 import { StatusPill } from "@/components/content/StatusPill";
@@ -32,7 +33,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
           <StatusBadge status={item.publishStatus} />
           <Link
             href={`/admin/${item.id}/edit`}
-            className="text-sm text-muted transition-colors hover:text-accent"
+            className="text-sm text-muted transition-colors hover:text-accent-text"
           >
             Edit
           </Link>
@@ -43,7 +44,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
         <div className="max-w-[760px]">
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
+            className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent-text"
           >
             <ArrowLeft aria-hidden className="size-4" />
             Back to content
@@ -101,6 +102,12 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
       <Container size="prose" className="mt-12">
         <Markdown content={item.body} />
       </Container>
+
+      {item.gallery.length > 0 ? (
+        <Container className="mt-12">
+          <ContentGallery images={item.gallery} title={item.title} />
+        </Container>
+      ) : null}
     </div>
   );
 }

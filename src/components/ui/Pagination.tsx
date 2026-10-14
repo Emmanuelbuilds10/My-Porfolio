@@ -51,8 +51,8 @@ export function Pagination({ page, total, hrefFor, className }: PaginationProps)
                 className={cn(
                   CELL,
                   entry === page
-                    ? "bg-accent font-medium text-on-accent"
-                    : "text-muted hover:bg-accent-soft hover:text-accent",
+                    ? "bg-accent-fill font-medium text-on-accent"
+                    : "text-muted hover:bg-accent-soft hover:text-accent-text",
                 )}
               >
                 {entry}
@@ -110,7 +110,7 @@ function PageArrow({
     <Link
       href={href}
       aria-label={label}
-      className={cn(shared, "text-muted hover:border-accent hover:text-accent")}
+      className={cn(shared, "text-muted hover:border-accent hover:text-accent-text")}
     >
       {icon}
     </Link>

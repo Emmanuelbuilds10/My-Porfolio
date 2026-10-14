@@ -71,7 +71,7 @@ export function Navbar() {
         <Container className="flex h-16 items-center justify-between gap-6 md:h-[72px]">
           <Link
             href="/"
-            className="font-serif text-xl text-fg transition-colors duration-200 hover:text-accent"
+            className="font-serif text-xl text-fg transition-colors duration-200 hover:text-accent-text"
           >
             {site.name}
           </Link>
@@ -86,7 +86,7 @@ export function Navbar() {
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "nav-link text-sm transition-colors duration-200",
-                    active ? "text-accent" : "text-muted hover:text-fg",
+                    active ? "text-accent-text" : "text-muted hover:text-fg",
                   )}
                 >
                   {link.label}
@@ -100,7 +100,7 @@ export function Navbar() {
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent md:hidden"
+            className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent-text md:hidden"
           >
             {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
@@ -134,7 +134,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent"
+            className="-mr-2 grid size-10 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent-text"
           >
             <X aria-hidden className="size-5" />
             <span className="sr-only">Close menu</span>
@@ -152,7 +152,7 @@ export function Navbar() {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-button px-3 py-3 font-serif text-lg transition-colors duration-200",
-                  active ? "bg-accent-soft text-accent" : "text-fg hover:bg-accent-soft",
+                  active ? "bg-accent-soft text-accent-text" : "text-fg hover:bg-accent-soft",
                 )}
               >
                 {link.label}
@@ -166,7 +166,7 @@ export function Navbar() {
             href={site.twitterUrl}
             target="_blank"
             rel="noreferrer noopener"
-            className="text-muted transition-colors hover:text-accent"
+            className="text-muted transition-colors hover:text-accent-text"
           >
             <TwitterIcon className="size-4" />
             <span className="sr-only">Twitter</span>
@@ -175,7 +175,7 @@ export function Navbar() {
             href={site.githubUrl}
             target="_blank"
             rel="noreferrer noopener"
-            className="text-muted transition-colors hover:text-accent"
+            className="text-muted transition-colors hover:text-accent-text"
           >
             <GithubIcon className="size-4" />
             <span className="sr-only">GitHub</span>

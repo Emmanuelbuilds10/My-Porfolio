@@ -96,6 +96,7 @@ function makeContent(
     excerpt,
     body,
     coverImageUrl: cover(slug),
+    gallery: [],
     category: null,
     tags: [],
     techStack: [],
@@ -617,7 +618,7 @@ export const siteSettings: SiteSettings = {
   email: "emmanueluwadiegwu10@gmail.com",
   twitterUrl: "https://twitter.com/emmanuel",
   githubUrl: "https://github.com/emmanuel",
-  behanceUrl: "https://www.behance.net/emmanuel",
+  dribbbleUrl: "https://dribbble.com/Skyezkreative",
   linkedinUrl: "https://www.linkedin.com/in/emmanuel",
 };
 

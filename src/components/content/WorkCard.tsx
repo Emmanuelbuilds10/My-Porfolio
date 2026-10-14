@@ -39,7 +39,7 @@ export function WorkCard({ project, priority = false }: WorkCardProps) {
           {site.caseStudyLabel}
         </ButtonLink>
       </div>
-      <h3 className="mt-4 text-center font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent">
+      <h3 className="mt-4 text-center font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent-text">
         {project.title}
       </h3>
     </article>

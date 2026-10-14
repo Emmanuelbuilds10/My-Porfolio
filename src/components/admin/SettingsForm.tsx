@@ -23,7 +23,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings | null }) {
   const [email, setEmail] = useState(settings?.email ?? "");
   const [twitterUrl, setTwitterUrl] = useState(settings?.twitterUrl ?? "");
   const [githubUrl, setGithubUrl] = useState(settings?.githubUrl ?? "");
-  const [behanceUrl, setBehanceUrl] = useState(settings?.behanceUrl ?? "");
+  const [dribbbleUrl, setDribbbleUrl] = useState(settings?.dribbbleUrl ?? "");
   const [linkedinUrl, setLinkedinUrl] = useState(settings?.linkedinUrl ?? "");
   const [avatarUrl, setAvatarUrl] = useState(settings?.avatarUrl ?? "");
   const [bio, setBio] = useState((settings?.bioParagraphs ?? []).join("\n\n"));
@@ -42,7 +42,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings | null }) {
       avatarUrl,
       twitterUrl,
       githubUrl,
-      behanceUrl,
+      dribbbleUrl,
       linkedinUrl,
     });
     setSaving(false);
@@ -95,11 +95,11 @@ export function SettingsForm({ settings }: { settings: SiteSettings | null }) {
             className={inputClass}
           />
         </Labeled>
-        <Labeled label="Behance URL" error={errors.behanceUrl}>
+        <Labeled label="Dribbble URL" error={errors.dribbbleUrl}>
           <input
-            value={behanceUrl}
-            onChange={(e) => setBehanceUrl(e.target.value)}
-            placeholder="https://www.behance.net/you"
+            value={dribbbleUrl}
+            onChange={(e) => setDribbbleUrl(e.target.value)}
+            placeholder="https://dribbble.com/you"
             className={inputClass}
           />
         </Labeled>

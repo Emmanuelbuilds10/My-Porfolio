@@ -65,7 +65,7 @@ export async function PortfolioHero() {
           {/* ---- Oversized wordmark ---- */}
           <p
             aria-hidden
-            className="animate-fade-up order-3 -mt-6 text-center text-[clamp(3rem,17vw,13.5rem)] leading-[0.82] font-bold tracking-[-0.03em] text-fg [animation-delay:320ms] lg:order-4 lg:col-span-3 lg:mt-4"
+            className="animate-fade-up order-3 -mt-8 text-center text-[clamp(3rem,17vw,13.5rem)] leading-[0.82] font-bold tracking-[-0.03em] text-fg [animation-delay:320ms] lg:order-4 lg:col-span-3 lg:-mt-4"
           >
             {site.name}
           </p>

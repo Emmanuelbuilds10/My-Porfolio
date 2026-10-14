@@ -51,7 +51,7 @@ export function FactCard({ fact, className }: FactCardProps) {
         className,
       )}
     >
-      <span className="grid size-10 place-items-center rounded-button bg-accent-soft text-accent">
+      <span className="grid size-10 place-items-center rounded-button bg-accent-soft text-accent-text">
         <Icon aria-hidden className="size-5" />
       </span>
       <p className="mt-4 text-[11px] font-medium tracking-[0.14em] text-faint uppercase">

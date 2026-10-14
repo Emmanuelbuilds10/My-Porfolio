@@ -19,7 +19,7 @@ export function EmptyState({ title, description, action, className }: EmptyState
         className,
       )}
     >
-      <span className="mx-auto grid size-12 place-items-center rounded-pill bg-accent-soft text-accent">
+      <span className="mx-auto grid size-12 place-items-center rounded-pill bg-accent-soft text-accent-text">
         <SearchX aria-hidden className="size-5" />
       </span>
       <p className="mt-5 font-serif text-xl text-fg">{title}</p>

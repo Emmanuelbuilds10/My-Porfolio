@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { contentSelect } from "@/lib/content-columns";
 import { createPublicClient } from "@/lib/supabase/server";
 import type {
   Category,
@@ -36,18 +37,27 @@ import {
  */
 
 const CONTENT_SELECT =
-  "id, type, title, slug, excerpt, body, cover_image_url, category_id, tags, tech_stack, live_url, repo_url, project_status, featured, publish_status, published_at, read_time, blur_data_url, created_at, updated_at, categories(id, name, slug)";
+  "id, type, title, slug, excerpt, body, cover_image_url, gallery, category_id, tags, tech_stack, live_url, repo_url, project_status, featured, publish_status, published_at, read_time, blur_data_url, created_at, updated_at, categories(id, name, slug)";
 
 /**
- * The same projection with the category embed forced to an inner join. PostgREST
- * only filters the parent rows by an embedded column when the embed is
- * `!inner` — without it a `?category=` filter would narrow the embedded object
- * but leave every post in the list.
+ * The category embed forced to an inner join. PostgREST only filters the
+ * parent rows by an embedded column when the embed is `!inner` — without it a
+ * `?category=` filter would narrow the embedded object but leave every post in
+ * the list.
  */
-const CONTENT_SELECT_BY_CATEGORY = CONTENT_SELECT.replace(
-  "categories(",
-  "categories!inner(",
-);
+const innerCategoryJoin = (select: string) =>
+  select.replace("categories(", "categories!inner(");
+
+/**
+ * The projection this server actually uses: `CONTENT_SELECT` minus any column
+ * the database has not been migrated for. Cached per process, because probing
+ * costs a round trip.
+ */
+let contentProjection: Promise<string> | null = null;
+function projection(): Promise<string> {
+  contentProjection ??= contentSelect(client(), CONTENT_SELECT);
+  return contentProjection;
+}
 
 /**
  * Statuses a visitor may ever see. A `scheduled` row becomes readable the
@@ -70,6 +80,7 @@ function mapRow(row: ContentRowWithCategory): ContentItem {
     excerpt: row.excerpt,
     body: row.body,
     coverImageUrl: row.cover_image_url,
+    gallery: row.gallery ?? [],
     category: row.categories ?? null,
     tags: row.tags ?? [],
     techStack: row.tech_stack ?? [],
@@ -106,7 +117,7 @@ export async function getFeaturedPost(): Promise<ContentItem | null> {
 
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "post")
     .eq("featured", true)
     .in("publish_status", PUBLIC_STATUSES)
@@ -126,7 +137,7 @@ export async function getLatestPosts(limit = 6): Promise<ContentItem[]> {
 
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "post")
     .in("publish_status", PUBLIC_STATUSES)
     .order("published_at", { ascending: false })
@@ -166,7 +177,7 @@ export async function getPosts({
 
   let query = client()
     .from("content")
-    .select(category ? CONTENT_SELECT_BY_CATEGORY : CONTENT_SELECT, {
+    .select(category ? innerCategoryJoin(await projection()) : await projection(), {
       count: "exact",
     })
     .eq("type", "post")
@@ -202,7 +213,7 @@ export async function getPostBySlug(slug: string): Promise<ContentItem | null> {
 
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "post")
     .eq("slug", slug)
     .in("publish_status", PUBLIC_STATUSES)
@@ -223,7 +234,7 @@ export async function getRelatedPosts(
 
   let query = client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "post")
     .in("publish_status", PUBLIC_STATUSES)
     .neq("id", postId)
@@ -243,7 +254,7 @@ export async function getRelatedPosts(
 
   const { data: fill } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "post")
     .in("publish_status", PUBLIC_STATUSES)
     .neq("id", postId)
@@ -314,7 +325,7 @@ export async function getProjects({
 
   let query = client()
     .from("content")
-    .select(CONTENT_SELECT, { count: "exact" })
+    .select(await projection(), { count: "exact" })
     .eq("type", "project")
     .in("publish_status", PUBLIC_STATUSES);
 
@@ -349,7 +360,7 @@ export async function getProjectBySlug(slug: string): Promise<ContentItem | null
 
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "project")
     .eq("slug", slug)
     .in("publish_status", PUBLIC_STATUSES)
@@ -365,7 +376,7 @@ export async function getFeaturedProjects(limit = 2): Promise<ContentItem[]> {
 
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "project")
     .eq("featured", true)
     .in("publish_status", PUBLIC_STATUSES)
@@ -425,7 +436,7 @@ export async function getRelatedProjects(
   // scored against it; the current project is excluded below.
   const { data, error } = await client()
     .from("content")
-    .select(CONTENT_SELECT)
+    .select(await projection())
     .eq("type", "project")
     .in("publish_status", PUBLIC_STATUSES)
     .order("published_at", { ascending: false })
@@ -517,7 +528,9 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
     email: row.email,
     twitterUrl: row.twitter_url ?? "",
     githubUrl: row.github_url ?? "",
-    behanceUrl: (row as SiteSettingsRow).behance_url ?? "",
+    // The stored column is still named `behance_url`, but it holds the
+    // Dribbble profile URL — the footer shows it as Dribbble.
+    dribbbleUrl: row.behance_url ?? "",
     linkedinUrl: (row as SiteSettingsRow).linkedin_url ?? "",
   };
 }

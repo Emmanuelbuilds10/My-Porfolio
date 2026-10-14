@@ -49,8 +49,12 @@ export function ContentRowActions({
     }
   }
 
+  // `relative` keeps each button's absolutely positioned `sr-only` label
+  // inside the button. Without it those labels anchor to the page and push the
+  // document wider than the phone screen, so the content list scrolls into
+  // empty space on mobile.
   const iconButton =
-    "grid size-8 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent disabled:opacity-50";
+    "relative grid size-8 place-items-center rounded-button text-muted transition-colors hover:bg-accent-soft hover:text-accent-text disabled:opacity-50";
 
   return (
     <div className="flex items-center gap-1">
@@ -79,7 +83,7 @@ export function ContentRowActions({
           type="button"
           disabled={busy}
           onClick={() => void run(() => toggleFeatured(id, !featured))}
-          className={cn(iconButton, featured && "text-accent")}
+          className={cn(iconButton, featured && "text-accent-text")}
           title={featured ? "Remove from landing page" : "Show on landing page"}
         >
           <Star aria-hidden className={cn("size-3.5", featured && "fill-current")} />

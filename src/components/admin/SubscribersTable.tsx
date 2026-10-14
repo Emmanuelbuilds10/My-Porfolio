@@ -69,13 +69,18 @@ export function SubscribersTable({ rows, q, page, totalPages }: SubscribersTable
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <form action="/admin/subscribers" method="get" role="search" className="flex gap-2">
+        <form
+          action="/admin/subscribers"
+          method="get"
+          role="search"
+          className="flex w-full gap-2 sm:w-auto"
+        >
           <input
             type="search"
             name="q"
             defaultValue={q}
             placeholder="Search by email"
-            className="h-10 w-[240px] rounded-button border border-line-strong bg-well px-4 text-sm text-fg outline-none transition-colors focus:border-accent"
+            className="h-10 w-full rounded-button border border-line-strong bg-well px-4 text-sm text-fg outline-none transition-colors focus:border-accent sm:w-[240px]"
           />
           <Button type="submit" variant="secondary" size="sm">
             Search
@@ -119,8 +124,8 @@ export function SubscribersTable({ rows, q, page, totalPages }: SubscribersTable
               className={cn(
                 "grid size-9 place-items-center rounded-button text-sm",
                 target === page
-                  ? "bg-accent text-on-accent"
-                  : "text-muted hover:bg-accent-soft hover:text-accent",
+                  ? "bg-accent-fill text-on-accent"
+                  : "text-muted hover:bg-accent-soft hover:text-accent-text",
               )}
             >
               {target}

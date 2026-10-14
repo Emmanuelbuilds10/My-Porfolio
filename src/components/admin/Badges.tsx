@@ -2,7 +2,7 @@ import type { ContentType, PublishStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const TYPE_STYLES: Record<ContentType, string> = {
-  post: "bg-accent text-on-accent",
+  post: "bg-accent-fill text-on-accent",
   // Second accent (sky) so Posts and Projects never read the same at a glance.
   project: "bg-info-soft text-info",
 };

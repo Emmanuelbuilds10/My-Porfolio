@@ -28,6 +28,21 @@ const slug = z
 
 const tag = z.string().trim().min(1).max(40);
 
+/**
+ * One extra image. Unlike `coverImageUrl` the URL is required — an empty entry
+ * would render as a broken tile — while `alt` stays optional (decorative art).
+ */
+const galleryImage = z.object({
+  url: z
+    .string()
+    .trim()
+    .refine(
+      (value) => /^https?:\/\/\S+$/i.test(value),
+      "Enter a full image URL starting with http:// or https://.",
+    ),
+  alt: z.string().trim().max(200).default(""),
+});
+
 export const contentSchema = z.object({
   id: z.uuid().optional(),
   type: contentTypeSchema.default("post"),
@@ -36,6 +51,7 @@ export const contentSchema = z.object({
   excerpt: z.string().trim().max(320, "Keep the short description under 320 characters.").default(""),
   body: z.string().max(200_000).default(""),
   coverImageUrl: httpUrl.default(""),
+  gallery: z.array(galleryImage).max(12, "Keep the gallery to 12 images or fewer.").default([]),
   altText: z.string().trim().max(200).default(""),
   featured: z.boolean().default(false),
   categoryId: z.uuid().nullable().default(null),
@@ -79,7 +95,7 @@ export const settingsSchema = z.object({
   avatarUrl: httpUrl.default(""),
   twitterUrl: httpUrl.default(""),
   githubUrl: httpUrl.default(""),
-  behanceUrl: httpUrl.default(""),
+  dribbbleUrl: httpUrl.default(""),
   linkedinUrl: httpUrl.default(""),
 });
 

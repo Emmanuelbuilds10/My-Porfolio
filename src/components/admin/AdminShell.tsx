@@ -61,7 +61,7 @@ export function AdminShell({
             aria-current={active ? "page" : undefined}
             className={cn(
               "inline-flex items-center gap-3 rounded-button px-3 py-2.5 text-sm transition-colors duration-200",
-              active ? "bg-accent-soft text-accent" : "text-muted hover:bg-panel/60 hover:text-fg",
+              active ? "bg-accent-soft text-accent-text" : "text-muted hover:bg-panel/60 hover:text-fg",
             )}
           >
             <item.icon aria-hidden className="size-4" />
@@ -79,7 +79,7 @@ export function AdminShell({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="-ml-1 grid size-9 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent lg:hidden"
+            className="-ml-1 grid size-9 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent-text lg:hidden"
           >
             <Menu aria-hidden className="size-5" />
             <span className="sr-only">Open menu</span>
@@ -96,7 +96,7 @@ export function AdminShell({
             <Link
               href="/"
               target="_blank"
-              className="hidden text-sm text-muted transition-colors hover:text-accent sm:inline"
+              className="hidden text-sm text-muted transition-colors hover:text-accent-text sm:inline"
             >
               View site ↗
             </Link>
@@ -104,7 +104,7 @@ export function AdminShell({
             <form action={signOut}>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-button border border-line-strong px-3 py-2 text-xs font-medium text-muted transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 rounded-button border border-line-strong px-3 py-2 text-xs font-medium text-muted transition-colors hover:border-accent hover:text-accent-text"
               >
                 <LogOut aria-hidden className="size-3.5" />
                 Log out
@@ -152,7 +152,7 @@ export function AdminShell({
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="grid size-9 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent"
+            className="grid size-9 place-items-center rounded-button text-muted hover:bg-accent-soft hover:text-accent-text"
           >
             <X aria-hidden className="size-5" />
             <span className="sr-only">Close menu</span>

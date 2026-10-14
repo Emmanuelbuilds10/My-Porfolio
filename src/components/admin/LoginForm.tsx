@@ -11,7 +11,7 @@ export function LoginForm({ configured }: { configured: boolean }) {
 
   return (
     <div className="w-full max-w-[400px] rounded-card border border-line bg-panel p-8 shadow-card">
-      <span className="grid size-10 place-items-center rounded-button bg-accent-soft text-accent">
+      <span className="grid size-10 place-items-center rounded-button bg-accent-soft text-accent-text">
         <Lock aria-hidden className="size-5" />
       </span>
       <h1 className="mt-5 font-serif text-2xl text-fg">Admin sign in</h1>

@@ -1,5 +1,6 @@
 "use server";
 
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { createPublicClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/queries";
 import { isValidEmail, normalizeEmail } from "@/lib/validation";
@@ -22,6 +23,16 @@ export async function subscribe(
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
+  // Five signups per address per ten minutes, before the honeypot so a bot
+  // cannot spend someone else's budget and a script cannot walk the list.
+  const limit = rateLimit(await clientKey("newsletter"), 5, 10 * 60_000);
+  if (!limit.ok) {
+    return {
+      ok: false,
+      message: `Too many attempts from this connection. Try again in ${limit.retryAfterSeconds}s.`,
+    };
+  }
+
   // Honeypot. A real person cannot see or reach this field, so anything in it
   // is a bot — return the success shape and drop the submission.
   const honeypot = String(formData.get("company") ?? "").trim();

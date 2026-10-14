@@ -18,6 +18,12 @@ export interface Category {
   slug: string;
 }
 
+/** One extra image in a post/project's gallery. */
+export interface ContentImage {
+  url: string;
+  alt: string;
+}
+
 /**
  * One row of the `content` table. Posts and projects share the table and every
  * shared column — the type-specific columns are simply null for the other type.
@@ -31,6 +37,8 @@ export interface ContentItem {
   /** Markdown. */
   body: string;
   coverImageUrl: string | null;
+  /** Extra images rendered under the body on the detail page. */
+  gallery: ContentImage[];
 
   /** Posts only. */
   category: Category | null;
@@ -74,7 +82,7 @@ export interface SiteSettings {
   email: string;
   twitterUrl: string;
   githubUrl: string;
-  behanceUrl: string;
+  dribbbleUrl: string;
   linkedinUrl: string;
 }
 

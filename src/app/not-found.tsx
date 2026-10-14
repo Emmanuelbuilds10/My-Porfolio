@@ -12,7 +12,7 @@ export default function NotFound() {
   return (
     <main className="flex flex-1 items-center py-section">
       <Container className="text-center">
-        <p className="font-serif text-sm tracking-[0.14em] text-accent uppercase">
+        <p className="font-serif text-sm tracking-[0.14em] text-accent-text uppercase">
           {site.name}
         </p>
         <h1 className="mt-6 font-serif text-[clamp(2rem,5vw,3rem)] leading-tight text-fg">

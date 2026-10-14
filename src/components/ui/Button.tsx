@@ -22,7 +22,11 @@ export function buttonStyles({
   className?: string;
 } = {}) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-button font-medium whitespace-nowrap",
+    // `relative` matters: buttons routinely hold an absolutely positioned
+    // `sr-only` label, and without a positioned ancestor that label is laid
+    // out against the page instead of the button — inside a wide table it
+    // then stretches the document and the page scrolls into empty space.
+    "relative inline-flex items-center justify-center gap-2 rounded-button font-medium whitespace-nowrap",
     "transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out-soft",
     "hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
     "disabled:pointer-events-none disabled:opacity-55",
@@ -34,10 +38,10 @@ export function buttonStyles({
 }
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-on-accent shadow-accent hover:bg-accent-strong",
+  primary: "bg-accent-fill text-on-accent shadow-accent hover:bg-accent-strong",
   secondary:
-    "border border-line-strong text-fg hover:border-accent hover:text-accent",
-  ghost: "text-muted hover:bg-accent-soft hover:text-accent",
+    "border border-line-strong text-fg hover:border-accent hover:text-accent-text",
+  ghost: "text-muted hover:bg-accent-soft hover:text-accent-text",
 };
 
 const SIZES: Record<ButtonSize, string> = {

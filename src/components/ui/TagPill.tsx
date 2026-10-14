@@ -15,7 +15,7 @@ interface TagPillProps {
  */
 export function TagPill({ children, href, className }: TagPillProps) {
   const classes = cn(
-    "inline-flex max-w-full items-center rounded-pill bg-accent px-3 py-1.5",
+    "inline-flex max-w-full items-center rounded-pill bg-accent-fill px-3 py-1.5",
     "text-[11px] leading-none font-medium text-on-accent",
     href && "transition-colors duration-200 hover:bg-accent-strong",
     className,

@@ -105,7 +105,7 @@ export default async function AdminDashboardPage({
             />
             <button
               type="submit"
-              className="h-10 rounded-button border border-line-strong px-4 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+              className="h-10 rounded-button border border-line-strong px-4 text-sm text-muted transition-colors hover:border-accent hover:text-accent-text"
             >
               Search
             </button>
@@ -124,7 +124,7 @@ export default async function AdminDashboardPage({
                 className={cn(
                   "rounded-button px-3 py-1.5 text-xs",
                   sort === option
-                    ? "bg-accent-soft text-accent"
+                    ? "bg-accent-soft text-accent-text"
                     : "text-muted hover:text-fg",
                 )}
               >
@@ -178,7 +178,7 @@ export default async function AdminDashboardPage({
                   <td className={cn(tdBase, "min-w-[220px]")}>
                     <Link
                       href={`/admin/${item.id}/edit`}
-                      className="font-medium text-fg transition-colors hover:text-accent"
+                      className="font-medium text-fg transition-colors hover:text-accent-text"
                     >
                       {item.title}
                     </Link>

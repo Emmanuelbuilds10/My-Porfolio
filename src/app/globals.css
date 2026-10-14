@@ -24,8 +24,19 @@
   --color-muted: #a3a3b8; /* excerpts, secondary copy */
   --color-faint: #7b7b92; /* meta lines, timestamps */
 
-  /* ---- accent ------------------------------------------------------------ */
-  --color-accent: #8b5cf6; /* violet */
+  /* ---- accent ------------------------------------------------------------
+     Three violets, because one cannot serve every job at WCAG AA on this
+     dark canvas. Rates below are measured against `--color-on-accent` white,
+     the canvas, and a 15% `--color-accent-soft` wash:
+       accent       dots, borders, focus rings  (4.6:1 on canvas)
+       accent-fill  filled buttons + pills      (7.1:1 under white text)
+       accent-text  accent-coloured copy        (6.3:1 on accent-soft)
+       accent-strong hover for filled surfaces  (5.7:1 under white text)
+     `--color-accent` itself is only 4.2:1 under white and 2.9:1 as text on an
+     accent-soft chip, so neither job may use it. */
+  --color-accent: #8b5cf6; /* violet — decoration only */
+  --color-accent-fill: #6d28d9; /* filled surfaces carrying white text */
+  --color-accent-text: #a78bfa; /* accent-coloured text + icons */
   --color-accent-strong: #7c3aed; /* hover / pressed violet */
   --color-accent-soft: #8b5cf626; /* 15% violet wash for tints + hovers */
   --color-accent-veil: #8b5cf64d; /* 30% violet wash for the hero duotone */
@@ -248,15 +259,16 @@
     }
 
     a {
-      color: var(--color-accent);
+      color: var(--color-accent-text);
       text-decoration: underline;
       text-decoration-color: var(--color-accent-glow);
       text-underline-offset: 3px;
-      transition: color 150ms ease; /* hover color comes from --color-accent-strong */
+      transition: color 150ms ease;
     }
 
+    /* Brighter, not deeper: the fill violet is 3.4:1 on the canvas. */
     a:hover {
-      color: var(--color-accent-strong);
+      color: var(--color-fg);
     }
 
     ul,
@@ -340,12 +352,20 @@
   animation: marquee 24s linear infinite;
 }
 
-.animate-marquee:hover {
+/* Second row of the same strip: the identical keyframes played backwards, so
+   it drifts the other way from the row above it. */
+.animate-marquee-reverse {
+  animation: marquee 24s linear infinite reverse;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
   animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
+  .animate-marquee,
+  .animate-marquee-reverse {
     animation: none;
   }
 }

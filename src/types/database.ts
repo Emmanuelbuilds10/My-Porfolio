@@ -13,6 +13,12 @@ export interface CategoryRow {
   created_at: string;
 }
 
+/** One extra image attached to a post or project (`content.gallery`). */
+export interface ContentImageRow {
+  url: string;
+  alt: string;
+}
+
 export interface ContentRow {
   id: string;
   type: ContentType;
@@ -21,6 +27,7 @@ export interface ContentRow {
   excerpt: string;
   body: string;
   cover_image_url: string | null;
+  gallery: ContentImageRow[] | null;
   category_id: string | null;
   tags: string[];
   tech_stack: string[];
@@ -54,6 +61,10 @@ export interface SiteSettingsRow {
   avatar_url: string | null;
   twitter_url: string | null;
   github_url: string | null;
+  /**
+   * Legacy column name. It has always stored the Dribbble profile URL (the
+   * footer renders it as Dribbble); the app exposes it as `dribbbleUrl`.
+   */
   behance_url: string | null;
   linkedin_url: string | null;
   updated_at: string;

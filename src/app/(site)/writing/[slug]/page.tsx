@@ -7,10 +7,11 @@ import { Container } from "@/components/ui/Container";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { TagPill } from "@/components/ui/TagPill";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ContentGallery } from "@/components/content/ContentGallery";
 import { Markdown } from "@/components/content/Markdown";
 import { PostCard } from "@/components/content/PostCard";
 import { AuthorCard } from "@/components/content/AuthorCard";
-import { ShareButtons } from "@/components/content/ShareButtons";
+import { ContactOnXButton, CopyLinkButton } from "@/components/content/DetailActions";
 import { formatPostMeta } from "@/lib/format";
 import {
   getPostBySlug,
@@ -18,7 +19,7 @@ import {
   getRelatedPosts,
   getSiteSettings,
 } from "@/lib/queries";
-import { site } from "@/lib/site";
+import { site, xContactUrl } from "@/lib/site";
 
 /** ISR: a published post re-renders at most once a minute. */
 export const revalidate = 60;
@@ -68,6 +69,7 @@ export default async function PostPage({ params }: PostPageProps) {
     getRelatedPosts(post.id, post.category?.id ?? null, 3),
     getSiteSettings(),
   ]);
+  const contactHref = xContactUrl(settings ? settings.twitterUrl : site.twitterUrl);
 
   return (
     <article className="pb-section">
@@ -75,7 +77,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <div className="max-w-[760px] pt-16">
           <Link
             href="/writing"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-accent"
+            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-accent-text"
           >
             <ArrowLeft aria-hidden className="size-4" />
             All writing
@@ -114,13 +116,20 @@ export default async function PostPage({ params }: PostPageProps) {
         <Markdown content={post.body} />
       </Container>
 
+      {post.gallery.length > 0 ? (
+        <Container className="mt-12">
+          <ContentGallery images={post.gallery} title={post.title} />
+        </Container>
+      ) : null}
+
       <Container size="prose" className="mt-section">
         <AuthorCard
           name={settings?.name ?? site.name}
           role={settings?.role ?? site.role}
           avatarUrl={settings?.avatarUrl ?? null}
         >
-          <ShareButtons title={post.title} />
+          <ContactOnXButton href={contactHref} />
+          <CopyLinkButton />
         </AuthorCard>
       </Container>
 

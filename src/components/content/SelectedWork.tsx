@@ -9,22 +9,63 @@ import { listLandingImages } from "@/lib/admin/data";
 import { getFeaturedProjects, getProjects } from "@/lib/queries";
 import { site } from "@/lib/site";
 import type { ContentItem } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 /** How many project tiles the landing grid shows — two rows of three. */
 const WORK_COUNT = 6;
 
 /**
- * Decorative, looping row of covers under the grid.
+ * Decorative, looping rows of covers under the grid.
  *
  * Two sources, in priority order:
  *   1. `landing_images` — tiles the admin curates in Admin → Landing carousel.
  *   2. published project covers, when the admin hasn't filled the strip yet.
+ *
+ * Two rows are drawn: the top one drifts left, the one under it drifts right,
+ * so the pair reads as a single band rather than a mirrored copy.
  *
  * Renders nothing until there are at least three tiles, so it never shows a
  * single image sliding past empty space. Purely presentational, hence
  * `aria-hidden` (the managed tiles carry real alt text in the admin only).
  */
 const MARQUEE_MINIMUM = 3;
+
+interface MarqueeTile {
+  key: string;
+  src: string;
+}
+
+/** One full-width drifting strip. The track holds the tiles twice so the
+ * -50% keyframe shift loops seamlessly. */
+function CoverStrip({
+  tiles,
+  reverse = false,
+  className,
+}: {
+  tiles: MarqueeTile[];
+  reverse?: boolean;
+  className?: string;
+}) {
+  const track = [...tiles, ...tiles];
+
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        "overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]",
+        className,
+      )}
+    >
+      <div className={cn("flex w-max gap-4", reverse ? "animate-marquee-reverse" : "animate-marquee")}>
+        {track.map((tile, index) => (
+          <div key={`${tile.key}-${index}`} className="w-40 shrink-0 md:w-48">
+            <CoverImage src={tile.src} alt="" ratio="card" sizes="192px" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function CoverMarquee({
   projects,
@@ -33,7 +74,7 @@ function CoverMarquee({
   projects: ContentItem[];
   managed: { id: string; imageUrl: string }[];
 }) {
-  const tiles =
+  const tiles: MarqueeTile[] =
     managed.length >= MARQUEE_MINIMUM
       ? managed.map((image) => ({ key: image.id, src: image.imageUrl }))
       : projects
@@ -43,17 +84,14 @@ function CoverMarquee({
 
   if (tiles.length < MARQUEE_MINIMUM) return null;
 
-  const track = [...tiles, ...tiles];
+  // The lower strip starts one tile later so the two rows never line up into
+  // an obvious mirror of each other.
+  const offset = [...tiles.slice(1), ...tiles.slice(0, 1)];
 
   return (
-    <div aria-hidden className="mt-10 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] md:mt-16">
-      <div className="animate-marquee flex w-max gap-4">
-        {track.map((tile, index) => (
-          <div key={`${tile.key}-${index}`} className="w-40 shrink-0 md:w-48">
-            <CoverImage src={tile.src} alt="" ratio="card" sizes="192px" />
-          </div>
-        ))}
-      </div>
+    <div className="mt-10 md:mt-16">
+      <CoverStrip tiles={tiles} />
+      <CoverStrip tiles={offset} reverse className="mt-4 md:mt-6" />
     </div>
   );
 }

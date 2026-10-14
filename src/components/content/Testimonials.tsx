@@ -24,6 +24,10 @@ export function Testimonials() {
     setIndex((value) => (value + delta + count) % count);
   }
 
+  // Nothing to show until real quotes are supplied — the section renders
+  // itself out of the page rather than leaving an empty shell behind.
+  if (count === 0) return null;
+
   return (
     <section id="testimonials" className="mt-section scroll-mt-24">
       <Container>
@@ -87,7 +91,7 @@ function CarouselButton({
       className={cn(
         "grid size-11 shrink-0 place-items-center rounded-pill border border-line-strong text-muted",
         "transition-colors duration-200 ease-out-soft",
-        "hover:border-accent hover:text-accent",
+        "hover:border-accent hover:text-accent-text",
       )}
     >
       <Icon aria-hidden className="size-5" />

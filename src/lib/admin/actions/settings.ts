@@ -14,7 +14,7 @@ export interface SettingsValues {
   avatarUrl: string;
   twitterUrl: string;
   githubUrl: string;
-  behanceUrl: string;
+  dribbbleUrl: string;
   linkedinUrl: string;
 }
 
@@ -42,7 +42,8 @@ export async function saveSettings(values: SettingsValues): Promise<SaveResult> 
       avatar_url: data.avatarUrl || null,
       twitter_url: data.twitterUrl || null,
       github_url: data.githubUrl || null,
-      behance_url: data.behanceUrl || null,
+      // Column keeps its legacy name; it has always held the Dribbble URL.
+      behance_url: data.dribbbleUrl || null,
       linkedin_url: data.linkedinUrl || null,
     },
     { onConflict: "id" },

@@ -50,7 +50,7 @@ export function PostCard({ post, priority = false, className }: PostCardProps) {
         {post.category ? <TagPill>{post.category.name}</TagPill> : null}
       </div>
 
-      <h3 className="mt-3 font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent">
+      <h3 className="mt-3 font-serif text-[17px] leading-snug text-fg transition-colors duration-200 group-hover:text-accent-text">
         <Link href={href} className="after:absolute after:inset-0 after:content-['']">
           {post.title}
         </Link>

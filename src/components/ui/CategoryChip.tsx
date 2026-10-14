@@ -27,8 +27,8 @@ export function CategoryChip({
         "inline-flex items-center rounded-pill border px-5 py-2.5 text-sm font-medium",
         "transition-colors duration-200 ease-out-soft",
         active
-          ? "border-accent bg-accent text-on-accent"
-          : "border-line-strong text-muted hover:border-accent hover:text-accent",
+          ? "border-accent bg-accent-fill text-on-accent"
+          : "border-line-strong text-muted hover:border-accent hover:text-accent-text",
         className,
       )}
     >

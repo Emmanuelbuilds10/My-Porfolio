@@ -16,7 +16,7 @@ export function StatCard({ label, value, icon, className }: StatCardProps) {
         <p className="text-[11px] font-medium tracking-[0.14em] text-faint uppercase">
           {label}
         </p>
-        {icon ? <span className="text-accent">{icon}</span> : null}
+        {icon ? <span className="text-accent-text">{icon}</span> : null}
       </div>
       <p className="mt-3 font-serif text-3xl text-fg">{value}</p>
     </div>

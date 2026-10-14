@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getAdminUser, isDemoMode } from "@/lib/auth";
 import { writeFeaturedOverride } from "@/lib/demo-featured";
 import { slugExists } from "@/lib/admin/data";
+import { hasColumn } from "@/lib/content-columns";
 import { adminGuard } from "@/lib/admin/guard";
 import { revalidateContent } from "@/lib/admin/revalidate";
 import {
@@ -55,7 +56,15 @@ export async function saveContent(values: ContentValues): Promise<SaveResult> {
 
   const status = data.publishStatus;
   let publishedAt = toIso(data.publishedAt);
-  if (status === "published" && !publishedAt) publishedAt = new Date().toISOString();
+  if (status === "published") {
+    // The public RLS policy only returns rows whose `published_at` has passed,
+    // so a date left over from scheduling would silently hide a published
+    // item. Publishing therefore always lands at or before now.
+    const now = Date.now();
+    if (!publishedAt || new Date(publishedAt).getTime() > now) {
+      publishedAt = new Date(now).toISOString();
+    }
+  }
   if (status === "scheduled") {
     if (!publishedAt || new Date(publishedAt).getTime() <= Date.now()) {
       return {
@@ -67,6 +76,12 @@ export async function saveContent(values: ContentValues): Promise<SaveResult> {
   }
 
   const isPost = data.type === "post";
+  const supabase = await createAuthClient();
+
+  // `content.gallery` arrives with migration 006. A database that has not run
+  // it yet must still save everything else, so the field is left out until the
+  // column exists (the gallery tab then has nothing to write to).
+  const gallerySupported = await hasColumn(supabase, "content", "gallery");
 
   const row = {
     type: data.type,
@@ -75,6 +90,7 @@ export async function saveContent(values: ContentValues): Promise<SaveResult> {
     excerpt: data.excerpt,
     body: data.body,
     cover_image_url: data.coverImageUrl || null,
+    ...(gallerySupported ? { gallery: data.gallery } : {}),
     alt_text: data.altText || null,
     category_id: isPost ? data.categoryId : null,
     tags: isPost ? data.tags : [],
@@ -87,7 +103,6 @@ export async function saveContent(values: ContentValues): Promise<SaveResult> {
     published_at: publishedAt,
   };
 
-  const supabase = await createAuthClient();
   let id = data.id;
   let previousSlug: string | undefined;
 
@@ -176,10 +191,17 @@ export async function togglePublish(id: string, publish: boolean): Promise<SaveR
     return { ok: false, message: "That item no longer exists." };
   }
 
+  // Same rule as `saveContent`: publishing must not keep a future date, or the
+  // item stays invisible to the public site.
+  const now = new Date();
+  const keepDate =
+    existing.published_at !== null &&
+    new Date(existing.published_at).getTime() <= now.getTime();
+
   const patch = publish
     ? {
         publish_status: "published" as const,
-        published_at: existing.published_at ?? new Date().toISOString(),
+        published_at: keepDate ? existing.published_at : now.toISOString(),
       }
     : { publish_status: "draft" as const };
 
