@@ -73,7 +73,7 @@ export async function PortfolioHero() {
           {/* ---- Supporting copy + CTA ---- */}
           <div className="animate-fade-up order-4 lg:order-3 lg:pt-6 [animation-delay:240ms]">
             <p className="text-sm leading-7 text-muted">{site.heroSubtitle}</p>
-            <ButtonLink href="/#work" size="lg" className="mt-6">
+            <ButtonLink href="/projects" size="lg" className="mt-6">
               <Play aria-hidden className="size-4 fill-current" />
               View my work
             </ButtonLink>

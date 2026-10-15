@@ -104,7 +104,7 @@ export default async function WritingPage({ searchParams }: WritingPageProps) {
           >
             {gridPosts.map((post, index) => (
               <Reveal key={post.id} delay={(index % 3) * 70} className="h-full">
-                <PostCard post={post} priority={index < 3} />
+                <PostCard post={post} />
               </Reveal>
             ))}
           </div>

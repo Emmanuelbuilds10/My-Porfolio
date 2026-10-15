@@ -116,7 +116,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           >
             {items.map((project, index) => (
               <Reveal key={project.id} delay={(index % 3) * 70} className="h-full">
-                <ProjectCard project={project} priority={index < 3} />
+                <ProjectCard project={project} />
               </Reveal>
             ))}
           </div>

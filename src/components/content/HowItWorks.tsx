@@ -33,31 +33,36 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <ol className="relative mt-stack grid gap-8 md:grid-cols-3">
-          {/* Dashed connector threaded behind the icon boxes on wide screens. */}
+        {/* The dashed connector is a sibling of the list, not a child: an
+            `<ol>` may only contain `<li>` (plus script-supporting elements), and
+            a stray element inside it can confuse the assistive tech that reads
+            the process steps as an ordered list. */}
+        <div className="relative mt-stack">
           <div
             aria-hidden
             className="absolute inset-x-0 top-7 hidden border-t border-dashed border-line-strong md:block"
           />
 
-          {processSteps.map((step, index) => {
-            const Icon = STEP_ICONS[step.icon] ?? Search;
+          <ol className="grid gap-8 md:grid-cols-3">
+            {processSteps.map((step, index) => {
+              const Icon = STEP_ICONS[step.icon] ?? Search;
 
-            return (
-              <li key={step.title} className="relative z-10 flex flex-col items-center text-center">
-                <Reveal delay={index * 90} className="flex flex-col items-center">
-                  <span className="grid size-14 place-items-center rounded-card border border-line-strong bg-veil text-fg">
-                    <Icon aria-hidden className="size-5" />
-                  </span>
-                  <h3 className="mt-5 font-serif text-lg text-fg">{step.title}</h3>
-                  <p className="mt-2 max-w-[320px] text-sm leading-7 text-muted">
-                    {step.description}
-                  </p>
-                </Reveal>
-              </li>
-            );
-          })}
-        </ol>
+              return (
+                <li key={step.title} className="relative z-10 flex flex-col items-center text-center">
+                  <Reveal delay={index * 90} className="flex flex-col items-center">
+                    <span className="grid size-14 place-items-center rounded-card border border-line-strong bg-veil text-fg">
+                      <Icon aria-hidden className="size-5" />
+                    </span>
+                    <h3 className="mt-5 font-serif text-lg text-fg">{step.title}</h3>
+                    <p className="mt-2 max-w-[320px] text-sm leading-7 text-muted">
+                      {step.description}
+                    </p>
+                  </Reveal>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </Container>
     </section>
   );

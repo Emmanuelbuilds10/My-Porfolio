@@ -137,8 +137,8 @@ export default async function PostPage({ params }: PostPageProps) {
         <Container className="mt-section">
           <SectionHeading title="More like this" />
           <div className="mt-8 grid gap-card sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((item, index) => (
-              <PostCard key={item.id} post={item} priority={index === 0} />
+            {related.map((item) => (
+              <PostCard key={item.id} post={item} />
             ))}
           </div>
         </Container>

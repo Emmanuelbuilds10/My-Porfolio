@@ -18,11 +18,16 @@
   --color-well: #131318; /* recessed: inputs, code blocks, image placeholders */
   --color-panel: #2a2a35; /* raised cards & panels */
 
-  /* ---- text -------------------------------------------------------------- */
+  /* ---- text --------------------------------------------------------------
+     Every step of this ramp clears WCAG AA (4.5:1) against the darkest
+     surfaces it renders on, including `--color-panel`: `faint` was #7b7b92
+     and only reached 3.4:1 there, so meta lines were hard to read on raised
+     cards and in bright light. A lighter value raises contrast on the dark
+     canvas — the opposite of darkening, which would lower it further. */
   --color-fg: #f6f6f8; /* headings, high-emphasis copy */
   --color-body: #c9c9d6; /* long-form reading copy */
   --color-muted: #a3a3b8; /* excerpts, secondary copy */
-  --color-faint: #7b7b92; /* meta lines, timestamps */
+  --color-faint: #9898ad; /* meta lines, timestamps */
 
   /* ---- accent ------------------------------------------------------------
      Three violets, because one cannot serve every job at WCAG AA on this

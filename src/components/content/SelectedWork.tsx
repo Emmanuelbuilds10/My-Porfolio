@@ -132,7 +132,7 @@ export async function SelectedWork() {
             <div className="mt-stack grid gap-card sm:grid-cols-2 lg:grid-cols-3">
               {items.map((project, index) => (
                 <Reveal key={project.id} delay={(index % 3) * 70} className="h-full">
-                  <WorkCard project={project} priority={index < 3} />
+                  <WorkCard project={project} />
                 </Reveal>
               ))}
             </div>

@@ -10,11 +10,7 @@ export const site = {
   description:
     "I'm a passionate web developer dedicated to creating innovative web products that enhance user experience.",
 
-  /**
-   * Home page. The hero is the portfolio landing; the blog sits behind
-   * "Writing" in the navigation.
-   */
-  heroGreeting: "Hello",
+  /** Social handle shown in the landing hero. */
   heroHandle: "Skyzkreative",
   heroTitle: "Building clean, fast websites that people enjoy using.",
   heroSubtitle:
@@ -195,12 +191,4 @@ export const testimonials: Testimonial[] = [];
 export const contactDetails = [
   { icon: "mail", label: "Email", value: site.email, href: `mailto:${site.email}` },
   { icon: "phone", label: "Phone", value: site.phone, href: `tel:${site.phone.replace(/\s+/g, "")}` },
-] as const;
-
-/** Footer rows — kept here so the wording can never drift between pages. */
-export const footerLinks = [
-  { href: "/", label: "Home", external: false },
-  { href: "/projects", label: "Work", external: false },
-  { href: "/about", label: "About", external: false },
-  { href: "/writing", label: "Blog", external: false },
 ] as const;

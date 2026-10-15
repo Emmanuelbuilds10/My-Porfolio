@@ -169,8 +169,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Container className="mt-section">
           <SectionHeading title="More projects" />
           <div className="mt-8 grid gap-card sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((item, index) => (
-              <ProjectCard key={item.id} project={item} priority={index === 0} />
+            {related.map((item) => (
+              <ProjectCard key={item.id} project={item} />
             ))}
           </div>
         </Container>
