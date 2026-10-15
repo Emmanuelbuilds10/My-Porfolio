@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { contentSelect } from "@/lib/content-columns";
 import { isSupabaseConfigured, type PagedResult } from "@/lib/queries";
 import { isServiceConfigured, createServiceClient } from "@/lib/supabase/admin";
-import { createAuthClient } from "@/lib/supabase/server";
+import { createAuthClient, createPublicClient } from "@/lib/supabase/server";
 import type { ContentImageRow, LandingImageRow, MessageRow } from "@/types/database";
 import {
   categories as fixtureCategories,
@@ -654,11 +654,18 @@ export interface AdminLandingImage {
   order: number;
 }
 
-/** Public read is open; the admin just orders it. */
+/**
+ * Public read is open; the admin just orders it.
+ *
+ * Uses the cookie-less public client, not the auth one: this is read by the
+ * landing page's Selected Work section, and the auth client touches
+ * `cookies()`, which would silently opt the entire homepage out of static
+ * rendering and make every visit wait on a live database round trip.
+ */
 export async function listLandingImages(): Promise<AdminLandingImage[]> {
   if (!isSupabaseConfigured()) return DEMO_LANDING_IMAGES;
 
-  const { data, error } = await (await client())
+  const { data, error } = await createPublicClient()
     .from("landing_images")
     .select("id, image_url, alt, sort_order")
     .order("sort_order")
